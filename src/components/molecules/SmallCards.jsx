@@ -2,7 +2,7 @@
 export const SmallCards = ({text}) => {
     return (
         <>
-        <div className="bg-white rounded-md w-110 h-70 shadow-md overflow-hidden">
+        <div className="bg-white rounded-md w-full h-70 shadow-md overflow-hidden">
 
             
             <div className="w-full h-54">

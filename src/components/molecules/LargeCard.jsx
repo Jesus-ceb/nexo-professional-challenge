@@ -3,7 +3,7 @@
 export const LargeCard = ({text, className}) => {
     return (
         <>
-        <div className="w-full flex bg-white rounded-md overflow-hidden ">
+        <div className="w-full flex flex-col md:flex-row bg-white rounded-md overflow-hidden ">
             {/* image */}
             <div className="w-110 h-64 shrink-0">
                 <img 
