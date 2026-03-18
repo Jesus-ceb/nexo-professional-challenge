@@ -23,7 +23,7 @@ function App() {
         {/* Main */}
         <div>
           {/* Cards section: Small Cards */}
-          <div className='flex flex-col w-full h-auto py-2'>
+          <div className='flex flex-col w-full h-auto py-4'>
             
             <span
             className='text-2xl md:text-3xl font-bold text-[#5D9C42]  ml-10 mx-auto w-fit'
