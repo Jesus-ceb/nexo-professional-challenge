@@ -22,8 +22,8 @@ function App() {
 
         {/* Main */}
         <div>
-          {/* Cards section 1 */}
-          <div className='flex flex-col w-full h-88 py-2'>
+          {/* Cards section: Small Cards */}
+          <div className='flex flex-col w-full h-auto py-2'>
             
             <span
             className='text-2xl md:text-3xl font-bold text-[#5D9C42]  ml-10 mx-auto w-fit'
@@ -44,53 +44,53 @@ function App() {
           </div>
 
           {/* Large Cards section 2 */}
-          <div className='bg-[#F0F7ED] pt-4'>
+          <div className='bg-[#F0F7ED] pt-8 pb-10 px- md:px-10'>
 
-            <h2 className='text-2xl md:text-3xl font-bold text-[#5D9C42] ml-10  w-fit '>
+            <h2 className='text-2xl md:text-3xl font-bold text-[#5D9C42]   w-fit '>
               Recomendaciones
             </h2>
 
             {/* Large Cards */}
 
-            <div className='grid grid-cols-2 gap-3 ml-14 gap-x-48 pb-8 w-fit'>
+            <div className='grid grid-cols-1 m-6 md:grid-cols-2 gap-4 md:gap-6 lg:gap-x-8'>
 
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
 
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl hidden md:block'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl hidden md:block'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl hidden md:block'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl hidden md:block'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
               
-              <div className='p-1 max-w-6xl'>
+              <div className='p-1 max-w-3xl hidden md:block'>
                 <LargeCard className='' text={'Hotel'}/>
               </div>
 

@@ -3,9 +3,9 @@
 export const LargeCard = ({text, className}) => {
     return (
         <>
-        <div className="w-full flex flex-col md:flex-row bg-white rounded-md overflow-hidden ">
+        <div className="w-full flex flex-col md:flex-col lg:flex-row bg-white rounded-md overflow-hidden ">
             {/* image */}
-            <div className="w-110 h-64 shrink-0">
+            <div className="w-full md:w-full lg:w-58 xl:w-110 h-52 md:h-62 shrink-0">
                 <img 
                 src="./images/room_hotel.jpg" 
                 alt="rooom" 
@@ -14,13 +14,13 @@ export const LargeCard = ({text, className}) => {
             </div>
 
             {/* RIGHT CONTENT */}
-            <div class="grid grid-cols-2 h-24 ml-6 mt-4">
+            <div class="grid grid-cols-2 h-auto md:h-21 px-4 mt-2">
 
                 {/* primer bloque */}
                 <div className=" w-10 h-10 flex items-end text-[#A0CF8C]">Hotel</div>
-                <div className="bg-[#5D9C42] ml-27 w-10 h-10 rounded-xl text-white justify-center items-center flex">8</div>
+                <div className="bg-[#5D9C42] ml-27 sm:ml-60 md:ml-30 lg:ml-24 w-10 h-10 rounded-xl text-white justify-center items-center flex">8</div>
                 <div className="text-[#5D9C42] w-40 text-xl font-bold h-10">HOTEL HILTON</div>
-                <div className="text-[#5D9C42] ml-18 h-10 font-bold text-sm">Muy bueno</div>
+                <div className="text-[#5D9C42] ml-18 sm:ml-54 md:ml-28 lg:ml-16 lg:justify-end h-10 font-bold text-sm">Muy bueno</div>
 
                 {/* segundo bloque */}
                 <div className="flex mt-5 w-62 col-span-2">
