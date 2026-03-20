@@ -14,7 +14,7 @@ export const LargeCard = ({text, className}) => {
             </div>
 
             {/* RIGHT CONTENT */}
-            <div class="grid grid-cols-2 h-auto md:h-21 px-4 mt-2">
+            <div className="grid grid-cols-2 h-auto md:h-21 px-4 mt-2">
 
                 {/* primer bloque */}
                 <div className=" w-10 h-10 flex items-end text-[#A0CF8C]">Hotel</div>
