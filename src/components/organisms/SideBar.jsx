@@ -1,13 +1,14 @@
 
 import { BsArchive, BsCardChecklist, BsFillHouseFill, BsGearFill, BsGrid3X3GapFill, BsPeopleFill, BsReverseLayoutTextWindowReverse } from "react-icons/bs"
+import { Link } from "react-router-dom"
 
 const menuItems = [
-    { name: 'Dashboard', icon: <BsReverseLayoutTextWindowReverse/>, path: '/admin'},
-    { name: 'Productos', icon: <BsArchive/>, path: ''},
-    { name: 'Categorias', icon: <BsGrid3X3GapFill/>, path: ''},
-    { name: 'clientes', icon: <BsPeopleFill/>, path: ''},
-    { name: 'Inventario', icon: <BsCardChecklist/>, path: ''},
-    { name: 'Configuracion', icon: <BsGearFill />, path: ''}
+    { name: 'Dashboard', icon: <BsReverseLayoutTextWindowReverse/>, path: '/admin/dashboard'},
+    { name: 'Productos', icon: <BsArchive/>, path: '/admin/products'},
+    { name: 'Categorias', icon: <BsGrid3X3GapFill/>, path: '/admin/categories'},
+    { name: 'clientes', icon: <BsPeopleFill/>, path: '/admin/customers'},
+    { name: 'Inventario', icon: <BsCardChecklist/>, path: '/admin/inventory'},
+    { name: 'Configuracion', icon: <BsGearFill />, path: '/admin/setup'}
 ]
 
 export const SideBar = () => {
@@ -16,15 +17,22 @@ export const SideBar = () => {
 
             <div className=" flex mt-3.5 justify-center">
                 <div className="flex items-center p-2.5 justify-center text-white cursor-pointer text-2xl w-fit">
-                    <BsFillHouseFill className="mr-2.5 text-2xl"/> 
-                    <span>NEXO</span>
+                    <Link className="flex items-center gap-2.5 mr-2.5 text-2xl" to={'/'}>
+                    <BsFillHouseFill />
+                    <span>NEXO</span> 
+                    </Link>
+                    
                 </div>
             </div>
             
             {/* menu of services */}
             <ul className="">
                 {menuItems.map((item, index)=> (
-                    <li key={index}><a className="flex gap-3 p-3 items-center hover:bg-[#162f55] transition-all text-xl" href="">{item.icon}<span>{item.name}</span></a></li>
+                    <li key={index}>
+                        <Link to={item.path} className="flex gap-3 p-3 items-center transition-all duration-300 hover:bg-[#162f55] text-xl">{item.icon}
+                        <span>{item.name}</span>
+                        </Link>
+                    </li>
                 ))}
                 
             </ul>

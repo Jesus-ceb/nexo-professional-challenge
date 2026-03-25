@@ -1,3 +1,4 @@
+import { Outlet } from "react-router-dom"
 import { Footer } from "../organisms/Footer"
 import { SideBar } from "../organisms/SideBar"
 
@@ -12,7 +13,8 @@ export const AdminPanel = () => {
             {/* footer */}
             <div className="flex flex-col flex-1">
 
-                <main className="flex-1 p-8 border">
+                <main className="flex-1">
+                    <Outlet />
 
                 </main>
 
