@@ -45,7 +45,7 @@ export const SearchSection = () => {
 
                 <Button
                 text={'Buscar'}
-                className={'border p-1 md:p-1.5 border-white text-white rounded-md  w-48  hover:text-[#5D9C42] hover:bg-white cursor-pointer justify-end'}
+                className={'border p-1 md:p-1.5 border-white text-white rounded-md  w-48 transition-all duration-300 hover:text-[#5D9C42] hover:bg-white cursor-pointer justify-end'}
                 />
             </div>
 
