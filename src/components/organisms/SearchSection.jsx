@@ -2,6 +2,7 @@ import { Button } from "../atoms/Button"
 import { SearchInput } from "../atoms/SearchInput"
 
 export const SearchSection = () => {
+    
     return (
         <>
         <div className='bg-[#5D9C42] p-1 md:p-2 lg:p-6'>

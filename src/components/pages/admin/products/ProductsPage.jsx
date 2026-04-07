@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../../atoms/Button"
+import { PRODUCTS_DB } from "../../../../data/products"
 
 export const ProductsPage = () => {
     const navigate = useNavigate()
@@ -20,48 +21,36 @@ export const ProductsPage = () => {
                     {/* Cabecera de la tabla */}
                     <thead className="bg-slate-100 text-blue-900 uppercase text-sm">
                         <tr>
-                            <th className="p-4 border-b">Hotel</th>
+                            <th className="p-4 border-b">Nombre</th>
                             <th className="p-4 border-b">Categoría</th>
-                            <th className="p-4 border-b">Precio</th>
-                            <th className="p-4 border-b text-center">Acciones</th>
+                            <th className="p-4 border-b">Direccion</th>
+                            <th className="p-4 border-b text-center">Ciudad</th>
+                            <th className="p-4 border-b text-center">Descripcion</th>
+                            <th className="p-4 border-b text-center">Atributos</th>
                         </tr>
                     </thead>
 
                     {/* Cuerpo de la tabla */}
                     <tbody className="text-slate-700">
                         {/* Aquí harás el .map() de tus productos de Nexo más adelante */}
-                        <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 border-b">Hotel de camerum</td>
-                            <td className="p-4 border-b">Electrónica</td>
-                            <td className="p-4 border-b font-bold">$450.000</td>
-                            <td className="p-4 border-b text-center">
-                                <button className="text-blue-600 hover:underline">Editar</button>
-                            </td>
-                        </tr>
-                        <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 border-b">Hotel Imperial</td>
-                            <td className="p-4 border-b">Electrónica</td>
-                            <td className="p-4 border-b font-bold">$450.000</td>
-                            <td className="p-4 border-b text-center">
-                                <button className="text-blue-600 hover:underline">Editar</button>
-                            </td>
-                        </tr>
-                        <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 border-b">Hotel nubes verdes</td>
-                            <td className="p-4 border-b">Electrónica</td>
-                            <td className="p-4 border-b font-bold">$450.000</td>
-                            <td className="p-4 border-b text-center">
-                                <button className="text-blue-600 hover:underline">Editar</button>
-                            </td>
-                        </tr>
-                        <tr className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 border-b">Hotel Royal</td>
-                            <td className="p-4 border-b">Electrónica</td>
-                            <td className="p-4 border-b font-bold">$450.000</td>
-                            <td className="p-4 border-b text-center">
-                                <button className="text-blue-600 hover:underline">Editar</button>
-                            </td>
-                        </tr>
+                        {PRODUCTS_DB.map((item, index) => (
+                            <tr key={index} className="hover:bg-slate-50 transition-colors">
+                                <td className="p-4 border-b">{item.product_name}</td>
+                                <td className="p-4 border-b">{item.category}</td>
+                                <td className="p-4 border-b ">{item.direction}</td>
+                                <td className="p-4 border-b ">{item.city}</td>
+                                <td className="p-4 border-b ">{item.description}</td>
+                                <td className="p-4 border-b ">{item.add_attributes}</td>
+                                <td className="p-4 border-b text-center">
+                                    <button className="text-blue-600 hover:underline">Editar</button>
+                                </td>
+                                <td className="p-4 border-b text-center">
+                                    <button className="text-blue-600 hover:underline">Eliminar</button>
+                                </td>
+                            </tr>
+                        ))}
+                        
+                        
                     </tbody>
                 </table>
 
