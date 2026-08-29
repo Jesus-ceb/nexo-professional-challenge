@@ -1,9 +1,22 @@
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../../atoms/Button"
-import { PRODUCTS_DB } from "../../../../data/products"
+import { useEffect, useState } from "react"
+
+import { getProducts } from '../../../api/productService';
 
 export const ProductsPage = () => {
+    
     const navigate = useNavigate()
+
+    const [products, setProducts] = useState([])
+    const [error, setError] = useState(null)
+
+    // When assembling the component, it requests the actual products from the backend.
+    useEffect(() => {
+        getProducts().then(setProducts).catch(() => setError('Error al cargar los productos'));
+    }, []);
+
+
     return (
         <>
         <div className="m-3.5 text-blue-500">
@@ -32,13 +45,13 @@ export const ProductsPage = () => {
 
                     {/* Cuerpo de la tabla */}
                     <tbody className="text-slate-700">
-                        {/* Aquí harás el .map() de tus productos de Nexo más adelante */}
-                        {PRODUCTS_DB.map((item, index) => (
-                            <tr key={index} className="hover:bg-slate-50 transition-colors">
-                                <td className="p-4 border-b">{item.product_name}</td>
-                                <td className="p-4 border-b">{item.category}</td>
-                                <td className="p-4 border-b ">{item.direction}</td>
-                                <td className="p-4 border-b ">{item.city}</td>
+                        {/* Aquí se hace .map() de tus productos de Nexo más adelante */}
+                        {products.map((item) => (
+                            <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                                <td className="p-4 border-b">{item.name}</td>
+                                <td className="p-4 border-b">{item.category?.category}</td>
+                                <td className="p-4 border-b ">{item.address?.direction}</td>
+                                <td className="p-4 border-b ">{item.city?.city}</td>
                                 <td className="p-4 border-b ">{item.description}</td>
                                 <td className="p-4 border-b ">{item.add_attributes}</td>
                                 <td className="p-4 border-b text-center">
