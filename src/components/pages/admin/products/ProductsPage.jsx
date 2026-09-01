@@ -2,7 +2,9 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "../../../atoms/Button"
 import { useEffect, useState } from "react"
 
-import { getProducts } from '../../../api/productService';
+import { deleteProduct, getProducts } from "../../../../api/productService"
+
+
 
 export const ProductsPage = () => {
     
@@ -15,6 +17,21 @@ export const ProductsPage = () => {
     useEffect(() => {
         getProducts().then(setProducts).catch(() => setError('Error al cargar los productos'));
     }, []);
+
+
+    // function to remove product from productsPage
+    const handleDelete = async (id) => {
+        const confirmDelete = window.confirm('¿Estas seguro de eliminar este producto?')
+        if(!confirmDelete) return;
+
+        try{
+            await deleteProduct(id);
+            setProducts((prev) => prev.filter((p) => p.id !== id));
+        }catch (err){
+            setError(err.message)
+
+        }
+    }
 
 
     return (
@@ -39,7 +56,7 @@ export const ProductsPage = () => {
                             <th className="p-4 border-b">Direccion</th>
                             <th className="p-4 border-b text-center">Ciudad</th>
                             <th className="p-4 border-b text-center">Descripcion</th>
-                            <th className="p-4 border-b text-center">Atributos</th>
+                            
                         </tr>
                     </thead>
 
@@ -55,10 +72,19 @@ export const ProductsPage = () => {
                                 <td className="p-4 border-b ">{item.description}</td>
                                 <td className="p-4 border-b ">{item.add_attributes}</td>
                                 <td className="p-4 border-b text-center">
-                                    <button className="text-blue-600 hover:underline">Editar</button>
+                                    <button 
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                    >
+                                        Editar
+                                    </button>
                                 </td>
                                 <td className="p-4 border-b text-center">
-                                    <button className="text-blue-600 hover:underline">Eliminar</button>
+                                    <button
+                                    onClick={() => handleDelete(item.id)}
+                                    className="text-blue-600 hover:underline cursor-pointer"
+                                    >
+                                        Eliminar
+                                    </button>
                                 </td>
                             </tr>
                         ))}

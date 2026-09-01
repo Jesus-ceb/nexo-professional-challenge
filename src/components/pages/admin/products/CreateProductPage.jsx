@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import { Button } from "../../../atoms/Button"
 
-import { getCategories, getCities, createProduct } from '../../../api/productService';
+import { createProduct, getCategories, getCities, uploadProductImage } from "../../../../api/productService"
+
+// import { getCategories, getCities, createProduct } from '../../../api/productService';
 
 export const CreateProductPage = () => {
 
@@ -36,6 +38,18 @@ export const CreateProductPage = () => {
     const [uploading, setUploading] = useState(false)
 
 
+    // function to clear all form fields
+    const resetForm = () => {
+        setProductName('');
+        setDirection('');
+        setDescription('');
+        setCategoryId('');
+        setCityId('');
+        setImageFiles([]);
+        setPreviews([]);
+    } 
+
+
     //Call the API to retrieve real categories and cities.
     useEffect(() => {
         getCategories().then(setCategories).catch(()=> setError('No se pudieron cargar las categorias'));
@@ -46,9 +60,16 @@ export const CreateProductPage = () => {
 
     // handles the selection of image files
     const handleFileChange = (e) =>{
-        const file = Array.from(e.target.files)
-        setImageFiles(file)
-        setPreviews(file.map((file) => URL.createObjectURL(file)))
+
+        const newFiles = Array.from(e.target.files)
+
+        setImageFiles((prevFiles) => [...prevFiles, ...newFiles])
+        setPreviews((prevPreviews) =>[
+            ...prevPreviews,
+            ...newFiles.map((file) => URL.createObjectURL(file)),
+        ])
+
+        e.target.value = '';
     }
 
 
@@ -75,17 +96,27 @@ export const CreateProductPage = () => {
         // This is where imageFiles connects with ProductImage
         // Each file is uploaded individually to the newly created product's image endpoint.
         for (const file of imageFiles){
-            await uploadProductImage(createProduct.id, file)
+            await uploadProductImage(createdProduct.id, file)
         }
 
         alert('Producto creado con exito');
+        resetForm();
 
 
         } catch (err){
+            console.error(err);
             setError(err.message);
         } finally{
             setUploading(false)
         }
+    };
+
+
+    // Remove image by id
+    const handleRemoveImage = (indexToRemove) => {
+
+        setImageFiles((prev) => prev.filter((_, i) => i !== indexToRemove));
+        setPreviews((prev) => prev.filter((_, i) => i !== indexToRemove));
     };
     
 
@@ -175,7 +206,7 @@ export const CreateProductPage = () => {
                         />
                     </div>
 
-                    {/* Atribute box */}
+                    {/* Images box */}
                     <div className="flex flex-col gap-1 col-span-2">
                         <label className="text-sm font-semibold text-slate-700">Imagenes</label>
 
@@ -183,24 +214,35 @@ export const CreateProductPage = () => {
                         type="file"
                         accept="image/*"
                         onChange={handleFileChange}
+                        multiple
                         className="p-2 bg-[#E8E8E8] rounded-lg outline-none"
                         />
 
                         {previews.length > 0 && (
-                            <div>
+                            <div className="flex gap-2 mt-2 flex-wrap">
                                 {previews.map((src, i) => (
-                                    <img src={src} key={i} alt={`preview-${i}`} className="w-20 h-20 object-cover rounded-lg border" />
+
+                                    <div key={i} className="w-aut relative ">
+                                        <img 
+                                        src={src}
+                                        alt={`preview-${i}`} 
+                                        className="w-20 h-20 object-cover rounded-lg border" 
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveImage(i)}
+                                            className= "absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center cursor-pointer"
+                                        >
+                                            x
+                                        </button>
+
+                                    </div>
+                                    
+
                                 ))}
                             </div>
                         )}
-
-
-                        {/* <textarea
-                        value={attributes}
-                        onChange={(e) => setAttributes(e.target.value)}
-                            rows="4"
-                            className="bg-[#E8E8E8] text-slate-900 p-3 rounded-lg outline-none focus:ring-2 focus:ring-[#5D9C42] resize-none"
-                        /> */}
                     </div>
 
                 </form>

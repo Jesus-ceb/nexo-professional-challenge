@@ -35,3 +35,27 @@ export async function createProduct(productData) {
 
     return res.json();
 }
+
+export async function uploadProductImage(productId, file ){
+
+    const formData = new FormData();
+    formData.append('file', file)
+
+    const res = await fetch(`${BASE_URL}/products/${productId}/image`, {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!res.ok) throw new Error('Error al subir la imagen');
+
+    return res.json();
+
+}
+
+export async function deleteProduct(id) {
+    const res = await fetch(`${BASE_URL}/products/${id}`, {
+        method: 'DELETE',
+    });
+    if (!res.ok) throw new Error('Error al eliminar el producto');
+    
+}
