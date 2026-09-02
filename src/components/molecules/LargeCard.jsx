@@ -1,6 +1,6 @@
 
 
-export const LargeCard = ({text, className}) => {
+export const LargeCard = ({category, name, className}) => {
     return (
         <>
         <div className="w-full flex flex-col md:flex-col lg:flex-row bg-white rounded-md overflow-hidden ">
@@ -19,11 +19,17 @@ export const LargeCard = ({text, className}) => {
 
                 {/* primer bloque */}
                 {/* categoria */}
-                <div className=" w-10 h-10 flex items-end  text-[#A0CF8C]">Hotel</div> 
+                <div className=" w-10 h-10 flex items-end  text-[#A0CF8C]">
+                    {category}
+                </div> 
                 {/* calificacion numerica*/}
-                <div className="bg-[#5D9C42] ml-27 sm:ml-60 md:ml-30 lg:ml-24 w-10 h-10 rounded-xl text-white justify-center items-center flex">8</div>
+                <div className="bg-[#5D9C42] ml-27 sm:ml-60 md:ml-30 lg:ml-24 w-10 h-10 rounded-xl text-white justify-center items-center flex">
+                    8
+                </div>
                 {/* nombre producto */}
-                <div className="text-[#5D9C42] w-40 text-xl font-bold h-10">HOTEL HILTON</div>
+                <div className="text-[#5D9C42] w-40 text-xl font-bold h-10">
+                    {name}
+                </div>
                 {/* calificacion texto */}
                 <div className="text-[#5D9C42] ml-18 sm:ml-54 md:ml-28 lg:ml-16 lg:justify-end h-10 font-bold text-sm">Muy bueno</div>
 
@@ -34,7 +40,7 @@ export const LargeCard = ({text, className}) => {
                         <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
                         </svg>
                     </div>
-                    <div className="text-[#5D9C42]"> A 940m del centro </div>
+                    <div className="text-[#5D9C42]"> Ubicación MOSTRAR EN EL MAPA </div>
                 </div>
 
                 {/* tercer bloque */}

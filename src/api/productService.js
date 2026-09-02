@@ -22,6 +22,26 @@ export async function getProducts() {
     if (!res.ok) throw new Error('Error al cargar productos');
 
     return res.json();
+
+    // const url = `${BASE_URL}/products`;
+
+    // console.log("URL CONSULTADA:", url);
+
+    // const res = await fetch(url);
+
+    // console.log("STATUS:", res.status);
+
+    // if (!res.ok) {
+    //     throw new Error('Error al cargar productos');
+    // }
+
+    // const data = await res.json();
+
+    // console.log("DATA DESDE SERVICE:", data);
+
+    // return data;
+
+
 }
 
 export async function createProduct(productData) {

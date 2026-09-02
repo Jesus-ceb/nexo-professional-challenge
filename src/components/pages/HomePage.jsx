@@ -3,9 +3,59 @@ import { SearchSection } from "../organisms/SearchSection"
 import { SmallCards } from "../molecules/SmallCards"
 import { LargeCard } from "../molecules/LargeCard"
 import { Footer } from "../organisms/Footer"
+import { useEffect, useState } from "react"
+import { getProducts } from "../../api/productService"
+
 
 
 export const HomePage = () => {
+
+
+
+    // product status
+    const [products, setProducts] = useState([])
+    const [error, setError] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
+
+
+    // total pagination 10 products
+    const PRODUCTS_PER_PAGE = 10;
+
+
+    // Get the products when the HomePage opens
+    useEffect(() => {
+
+
+
+        getProducts()
+        .then((data) => {
+            console.log("PRODUCTOS RECIBIDOS:", data);
+            setProducts(data);
+        })
+        .catch((err) => {
+            console.error("ERROR:", err);
+            setError("No se pudieron cargar los productos");
+        });
+
+
+
+    }, []);
+
+    // pagination
+    const totalPages = Math.ceil(
+        products.length / PRODUCTS_PER_PAGE
+    )
+
+    const startIndex =
+        (currentPage - 1) * PRODUCTS_PER_PAGE;
+
+    const currentProducts = products.slice(
+        startIndex,
+        startIndex + PRODUCTS_PER_PAGE
+    );
+
+
+
     return (
         <>
         <div>
@@ -51,47 +101,51 @@ export const HomePage = () => {
 
                 <div className ='grid grid-cols-1 m-6 md:grid-cols-2 gap-4 md:gap-6 lg:gap-x-8'>
 
-                    <div className ='p-1 max-w-3xl'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
+                    {currentProducts.map((product) => (
+                        <div key={product.id} className ='p-1 max-w-3xl'>
 
-                    <div className ='p-1 max-w-3xl'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className ='p-1 max-w-3xl'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className ='p-1 max-w-3xl'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className ='p-1 max-w-3xl'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className ='p-1 max-w-3xl hidden md:block'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className ='p-1 max-w-3xl hidden md:block'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className ='p-1 max-w-3xl hidden md:block'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className ='p-1 max-w-3xl hidden md:block'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
-                    
-                    <div className='p-1 max-w-3xl hidden md:block'>
-                        <LargeCard className='' text={'Hotel'}/>
-                    </div>
+                            <LargeCard 
+                            className='' 
+                            name={product.name}
+                            category={product.category?.category}
+                            />
 
+                        </div>
+                    ))}
                 </div>
+
+                {totalPages > 1 && (
+                    <div className="flex justify-center items-center gap-4 mt-8">
+
+                        <button
+                            onClick={() =>
+                                setCurrentPage((page) => page - 1)
+                            }
+                            disabled={currentPage === 1}
+                            className="px-4 py-2 rounded-md bg-[#5D9C42] text-white disabled:opacity-40"
+                        >
+                            Anterior
+                        </button>
+
+                        <span className="text-[#5D9C42] font-bold">
+                            Página {currentPage} de {totalPages}
+                        </span>
+
+                        <button
+                            onClick={() =>
+                                setCurrentPage((page) => page + 1)
+                            }
+                            disabled={currentPage === totalPages}
+                            className="px-4 py-2 rounded-md bg-[#5D9C42] text-white disabled:opacity-40"
+                        >
+                            Siguiente
+                        </button>
+
+                    </div>
+
+                )}
+
+
             </div>
 
             </div>
