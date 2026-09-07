@@ -22,6 +22,12 @@ export const HomePage = () => {
     const PRODUCTS_PER_PAGE = 10;
 
 
+    // shuffle Products
+    const shuffleProducts = (products) =>{
+        return [...products].sort(() => Math.random() - 0.5);
+    }
+
+
     // Get the products when the HomePage opens
     useEffect(() => {
 
@@ -30,7 +36,8 @@ export const HomePage = () => {
         getProducts()
         .then((data) => {
             console.log("PRODUCTOS RECIBIDOS:", data);
-            setProducts(data);
+            const randomProducts = shuffleProducts(data)
+            setProducts(randomProducts);
         })
         .catch((err) => {
             console.error("ERROR:", err);

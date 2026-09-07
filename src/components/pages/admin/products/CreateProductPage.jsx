@@ -79,6 +79,9 @@ export const CreateProductPage = () => {
     const handleclick = async (e) => {
         e.preventDefault();
 
+        setError(null);
+        setUploading(true);
+
 
         try{
 
@@ -129,6 +132,13 @@ export const CreateProductPage = () => {
             
                 {/* Title */}
                 <h1 className="text-2xl mb-4">Agregar Producto</h1>
+
+                {error && (
+                    <p className="text-red-500 text-sm mt-2">
+                        {error}
+                    </p>
+                )}
+
 
                 {/* Form  */}
                 <form className="grid grid-cols-2 gap-x-8 gap-y-6 ">

@@ -23,25 +23,6 @@ export async function getProducts() {
 
     return res.json();
 
-    // const url = `${BASE_URL}/products`;
-
-    // console.log("URL CONSULTADA:", url);
-
-    // const res = await fetch(url);
-
-    // console.log("STATUS:", res.status);
-
-    // if (!res.ok) {
-    //     throw new Error('Error al cargar productos');
-    // }
-
-    // const data = await res.json();
-
-    // console.log("DATA DESDE SERVICE:", data);
-
-    // return data;
-
-
 }
 
 export async function createProduct(productData) {
@@ -51,7 +32,11 @@ export async function createProduct(productData) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(productData),
     });
-    if (!res.ok) throw new Error("Error al crear el producto")
+
+    if (!res.ok) {
+        const errorMessage = await res.text() //We read the actual message from the backend.
+        throw new Error(errorMessage)
+    }
 
     return res.json();
 }
