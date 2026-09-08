@@ -46,7 +46,7 @@ export async function uploadProductImage(productId, file ){
     const formData = new FormData();
     formData.append('file', file)
 
-    const res = await fetch(`${BASE_URL}/products/${productId}/image`, {
+    const res = await fetch(`${BASE_URL}/products/${productId}/images/upload`, {
         method: 'POST',
         body: formData
     });
@@ -63,4 +63,17 @@ export async function deleteProduct(id) {
     });
     if (!res.ok) throw new Error('Error al eliminar el producto');
     
+}
+
+//Find product by id
+
+export async function getProductById(id) {
+
+    const res = await fetch(`${BASE_URL}/products/${id}`);
+
+    if (!res.ok) {
+        throw new Error("Error al cargar el producto");
+    }
+
+    return res.json();
 }

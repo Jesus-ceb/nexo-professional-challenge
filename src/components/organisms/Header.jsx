@@ -10,7 +10,7 @@ export const Header = () => {
             <div className="flex ml-2.5 items-center gap-2 md:gap-4">
                 <img
                 className="w-10 h-10 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 cursor-pointer object-contain   " 
-                src="./images/logo2-nx.png" 
+                src="/images/logo2-nx.png" 
                 alt="Logo Nexo" />
 
                 <span 

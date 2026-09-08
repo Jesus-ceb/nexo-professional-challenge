@@ -1,8 +1,9 @@
 import { Route, Routes } from "react-router-dom"
 // main routes  
 import { HomePage } from "../components/pages/HomePage"
+import { ProductDetailPage } from "../components/pages/ProductDetailPage"
+// Admin routes
 import { AdminPanel } from "../components/pages/AdminPanel"
-// other routes
 import { ProductsPage } from "../components/pages/admin/products/ProductsPage"
 import { DashboardPage } from "../components/pages/admin/dashboard/DashboardPage"
 import { CustomersPage } from "../components/pages/admin/customers/CustomersPage"
@@ -19,6 +20,7 @@ export const AppRouter = () => {
             <Routes>
                 {/* La URL principal "/" cargará todo tu diseño actual de Nexo */}
                 <Route path="/" element={<HomePage />}  />
+                <Route path="/products/:id" element={<ProductDetailPage/>}  />
 
                 {/* La URL "/admin" y sus rutas hijas */}
                 <Route path="/admin" element={<AdminPanel/>}>

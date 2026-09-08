@@ -6,9 +6,13 @@ import { Footer } from "../organisms/Footer"
 import { useEffect, useState } from "react"
 import { getProducts } from "../../api/productService"
 
+import { useNavigate } from "react-router-dom"
+
 
 
 export const HomePage = () => {
+
+    const navigate = useNavigate()
 
 
 
@@ -109,9 +113,13 @@ export const HomePage = () => {
                 <div className ='grid grid-cols-1 m-6 md:grid-cols-2 gap-4 md:gap-6 lg:gap-x-8'>
 
                     {currentProducts.map((product) => (
-                        <div key={product.id} className ='p-1 max-w-3xl'>
+                        <div
+                        onClick={() => navigate(`/products/${product.id}`)} 
+                        key={product.id} 
+                        className ='max-w-3xl rounded-lg cursor-pointer transition duration-200 hover:shadow-lg '
+                        >
 
-                            <LargeCard 
+                            <LargeCard
                             className='' 
                             name={product.name}
                             category={product.category?.category}
