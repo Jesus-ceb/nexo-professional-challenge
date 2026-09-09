@@ -4,6 +4,7 @@ import { Footer } from '../organisms/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getProductById, getProducts } from '../../api/productService'
 import { RiArrowLeftCircleLine, RiMapPinLine } from 'react-icons/ri'
+import { GalleryModal } from '../organisms/GalleryModal'
 
 export const ProductDetailPage = () => {
 
@@ -12,6 +13,9 @@ export const ProductDetailPage = () => {
 
     const [product, setProduct] = useState(null)
     const [error, setError] = useState(null)
+
+    // controla si el modal de galería está visible
+    const [showGallery, setShowGallery] = useState(false)
 
     useEffect(() => {
 
@@ -77,27 +81,41 @@ export const ProductDetailPage = () => {
                     
                     <div className="px-6 mt-4">
                     {product.images?.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-2 h-96">
+                        <div className="grid grid-cols-2 gap-2 h-96 overflow-hidden ">
 
                             {/* Columna izquierda: una sola imagen grande, ocupa el 50% del ancho */}
-                            <div className="h-full overflow-hidden rounded-md">
+                            <div className="h-96 overflow-hidden rounded-md">
                                 <img
                                     src={product.images[0].url}
                                     alt={product.name}
                                     className="w-full h-full object-cover rounded-lg"
                                 />
+
                             </div>
 
                             {/* Columna derecha: grilla interna 2x2, misma altura total que la imagen grande */}
-                            <div className="grid grid-cols-2 grid-rows-2 gap-2 h-full">
-                                {product.images.slice(1, 5).map((img) => (
-                                    <div key={img.id} className="h-full overflow-hidden rounded-lg">
-                                <img
-                                    src={img.url}
-                                    alt={product.name}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
+                            <div className="grid grid-cols-2 grid-rows-2 gap-2 h-96 overflow-hidden">
+                                {product.images.slice(1, 5).map((img, index) => (
+                                    <div key={img.id} className="h-full overflow-hidden rounded-lg relative">
+                                        <img
+                                            src={img.url}
+                                            alt={product.name}
+                                            className="w-full h-full object-cover"
+                                        />
+
+                                        {/* button watch galeri */}
+                                        {index === 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowGallery(true)}
+                                                className="absolute top-3 right-3 bg-white text-slate-800 text-sm font-semibold px-4 py-2 rounded-full  shadow-md hover:bg-slate-100 transition-colors cursor-pointer hover:shadow-lg"
+                                            >
+                                                Ver galería
+                                            </button>
+                                        )}
+
+
+                                    </div>
                                 ))}
 
                                 {/* Si hay menos de 4 imágenes adicionales, se rellenan los espacios con placeholders */}
@@ -138,11 +156,17 @@ export const ProductDetailPage = () => {
                     <p className="mt-2 text-slate-600 leading-relaxed">
                         {product.description}
                     </p>
-
-                    
-
                 </div>
             </div>
+
+            {/* el modal solo se renderiza si showGallery es true */}
+            {showGallery && (
+                <GalleryModal 
+                images={product.images}
+                productName={product.name}
+                onClose={() => setShowGallery(false)}
+                />
+            )}
 
         {/* footer */}
         <Footer />

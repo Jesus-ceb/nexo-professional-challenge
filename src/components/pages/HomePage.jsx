@@ -120,6 +120,7 @@ export const HomePage = () => {
                         >
 
                             <LargeCard
+                            imageURL={product.images?.[0].url}
                             className='' 
                             name={product.name}
                             category={product.category?.category}

@@ -1,6 +1,6 @@
 
 
-export const LargeCard = ({category, name, className}) => {
+export const LargeCard = ({category, name, imageURL, className}) => {
     return (
         <>
         <div className="w-full flex flex-col md:flex-col lg:flex-row bg-white rounded-md overflow-hidden ">
@@ -8,7 +8,7 @@ export const LargeCard = ({category, name, className}) => {
             {/* image */}
             <div className="w-full lg:w-1/2 xl:w-1/2 h-52 md:h-62 shrink-0">
                 <img 
-                src="./images/room_hotel.jpg" 
+                src={imageURL || "./images/room_hotel.jpg"} 
                 alt="rooom" 
                 className="w-full rounded-md h-full object-cover"
                 />
