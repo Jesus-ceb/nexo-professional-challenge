@@ -60,7 +60,7 @@ src/
 │           └── products/
 │               ├── CreateProductPage.jsx
 │               └── ProductsPage.jsx
-├── data/                    # Datos de referencia/legado
+├── data/                    # Datos de referencia
 ├── routes/
 │   └── AppRouter.jsx        # Definición de todas las rutas de la app
 ├── App.jsx
@@ -240,9 +240,8 @@ npm run lint          # Ejecuta ESLint para verificar código
 - ⏳ Edición de alojamientos existentes desde el panel admin
 - ⏳ Búsqueda funcional por nombre en la sección de búsqueda del Home
 - ⏳ Filtro real por tipo de alojamiento (Hoteles, Departamentos, Hostales, Desayunos)
-- ⏳ Gestión de clientes e inventario (secciones ya presentes en el scaffolding del panel admin)
 - ⏳ Autenticación de usuarios (registro / inicio de sesión)
-- ⏳ Reordenamiento de imágenes desde la interfaz
+
 ## 🎨 Guía de Estilos
  
 ### Colores Principales
