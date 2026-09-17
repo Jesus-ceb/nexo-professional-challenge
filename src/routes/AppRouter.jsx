@@ -1,7 +1,4 @@
 import { Route, Routes } from "react-router-dom"
-// main routes  
-import { HomePage } from "../components/pages/HomePage"
-import { ProductDetailPage } from "../components/pages/ProductDetailPage"
 // Admin routes
 import { AdminPanel } from "../components/pages/AdminPanel"
 import { ProductsPage } from "../components/pages/admin/products/ProductsPage"
@@ -11,6 +8,12 @@ import { InventoryPage } from "../components/pages/admin/inventory/InventoryPage
 import { CategoriesPage } from "../components/pages/admin/categories/CategoriesPage"
 import { SetupPage } from "../components/pages/admin/setup/SetupPage"
 import { CreateProductPage } from "../components/pages/admin/products/CreateProductPage"
+// main routes  
+import { HomePage } from "../components/pages/HomePage"
+import { ProductDetailPage } from "../components/pages/ProductDetailPage"
+// urls auth
+import { RegisterPage } from "../components/pages/auth/RegisterPage"
+import { LoginPage } from "../components/pages/auth/LoginPage"
 
 
 
@@ -18,9 +21,6 @@ export const AppRouter = () => {
         return (
             <>
             <Routes>
-                {/* La URL principal "/" cargará todo tu diseño actual de Nexo */}
-                <Route path="/" element={<HomePage />}  />
-                <Route path="/products/:id" element={<ProductDetailPage/>}  />
 
                 {/* La URL "/admin" y sus rutas hijas */}
                 <Route path="/admin" element={<AdminPanel/>}>
@@ -32,6 +32,15 @@ export const AppRouter = () => {
                     <Route path="categories" element={<CategoriesPage />} />
                     <Route path="setup" element={<SetupPage />} />
                 </Route>
+                
+                {/* La URL principal "/" cargará todo tu diseño actual de Nexo */}
+                <Route path="/" element={<HomePage />}  />
+                <Route path="/products/:id" element={<ProductDetailPage/>}  />
+
+                {/* URLs de auth */}
+                <Route path="/register" element={<RegisterPage/>} />
+                <Route path="/login" element={<LoginPage/>} />
+
                 
             </Routes>
             </>

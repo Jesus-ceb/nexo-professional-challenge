@@ -16,7 +16,9 @@ El frontend consume una API REST propia desarrollada en **Spring Boot** (ver sec
 - ✅ **Página de detalle de producto**: Vista ampliada con galería de imágenes, dirección, ciudad, categoría y descripción
 - ✅ **Galería de imágenes**: Modal con todas las fotos del alojamiento en formato de cuadrícula
 - ✅ **Navegación por rutas dinámicas**: Cada alojamiento tiene su propia URL (`/products/:id`)
-### Panel de Administración
+### Panel de Administración('/admin')
+- ✅ **Acceso al Panel**: Módulo accesible desde la ruta `http://localhost:5173/admin`
+- ✅ **Menú de Navegación**: Barra lateral (`SideBar`) que permite estructurar la gestión de productos, inventario, categorías y configuración.
 - ✅ **Crear alojamiento**: Formulario completo con nombre, categoría, ciudad, dirección, descripción e imágenes
 - ✅ **Selects dinámicos**: Categorías y ciudades cargadas en tiempo real desde el backend (no hardcodeadas)
 - ✅ **Carga múltiple de imágenes**: Selección de varios archivos, con previsualización y opción de eliminar cada una antes de guardar
@@ -24,6 +26,9 @@ El frontend consume una API REST propia desarrollada en **Spring Boot** (ver sec
 - ✅ **Listado de alojamientos**: Tabla administrativa con todos los productos creados
 - ✅ **Eliminar alojamiento**: Borrado con confirmación, actualizando la tabla sin recargar la página
 - ⏳ **Editar alojamiento**: Interfaz lista, lógica pendiente de implementar
+
+
+
 ## 🏗️ Arquitectura del Proyecto
  
 ### Diseño Atómico
