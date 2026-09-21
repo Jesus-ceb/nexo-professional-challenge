@@ -1,10 +1,70 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../../atoms/Button'
 import { useNavigate } from 'react-router-dom'
 
 export const RegisterPage = () => {
-
+    
     const navigate = useNavigate()
+
+    // one state for each form field
+    const [name, setName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+
+    // subject to errors, one key per field
+    const [errors, setErrors] = useState({})
+
+    // validates the entire form 
+
+    const validate = () =>{
+        const newErrors = {}
+
+        if (!name.trim()){
+            newErrors.name = 'Nombre obligatorio';
+        }
+
+        if (!lastName.trim()){
+            newErrors.lastName = 'Apellido obligatorio';
+        }
+
+        if (!email.trim()){
+            newErrors.email = 'Correo obligatorio';
+
+        }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+            newErrors.email = 'Ingresa un correo válido (ej: nombre@correo.com)'
+        }
+
+        if (!password.trim()){
+            newErrors.password = 'Contraseña obligatoria'
+        } else if (password.length < 8){
+            newErrors.password = 'La contraseña debe tener al menos 8 caracteres'
+        }
+
+        if (!confirmPassword){
+            newErrors.confirmPassword = 'Debes confirmar la contraseña'
+        }else if (password && confirmPassword && password !== confirmPassword){
+            newErrors.confirmPassword = 'Las contraseñas no coinciden'
+        }
+
+        setErrors(newErrors)
+
+        // If the object ended up empty, there are no errors.
+        return Object.keys(newErrors).length === 0;
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if(!validate()){
+            return // It stops here if something failed; it doesn't call the backend yet.
+        }
+    }
+
+
+
+
     return (
         <>
         {/* header */}
@@ -54,50 +114,67 @@ export const RegisterPage = () => {
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-semibold text-slate-700">Nombre</label>
                         <input
+                            value={name}
                             type="text"
+                            onChange={(e) => setName(e.target.value)}
                             className="p-2 text-black bg-[#E8E8E8] outline-none focus:ring-2 focus:ring-[#5D9C42] rounded-lg"
                         />
+                        {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                     </div>
+                    
 
                     {/* Apellido */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-semibold text-slate-700">Apellido</label>
                         <input
-                            type="text"
-                            className="p-2 text-black bg-[#E8E8E8] outline-none focus:ring-2 focus:ring-[#5D9C42] rounded-lg"
+                        value={lastName}
+                        type="text"
+                        onChange={ (e) => setLastName(e.target.value)}
+                        className="p-2 text-black bg-[#E8E8E8] outline-none focus:ring-2 focus:ring-[#5D9C42] rounded-lg"
                         />
+                        {errors.lastName && <span className='text-red-500 text-xs' >{errors.lastName}</span> }
                     </div>
 
                     {/* Email: ocupa las 2 columnas */}
                     <div className="flex flex-col gap-1 col-span-2">
                         <label className="text-sm font-semibold text-slate-700">Correo electrónico</label>
                         <input
-                            type="email"
-                            className="p-2 text-black bg-[#E8E8E8] outline-none focus:ring-2 focus:ring-[#5D9C42] rounded-lg"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        type="email"
+                        className="p-2 text-black bg-[#E8E8E8] outline-none focus:ring-2 focus:ring-[#5D9C42] rounded-lg"
                         />
+                        {errors.email && <span className='text-red-500 text-xs'>{errors.email}</span>}
                     </div>
 
                     {/* Contraseña */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-semibold text-slate-700">Contraseña</label>
                         <input
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             className="p-2 text-black bg-[#E8E8E8] outline-none focus:ring-2 focus:ring-[#5D9C42] rounded-lg"
                         />
+                        {errors.password && <span className='text-red-500 text-xs' >{errors.password}</span>}
                     </div>
 
                     {/* Confirmar contraseña */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm font-semibold text-slate-700">Confirmar contraseña</label>
                         <input
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                             type="password"
                             className="p-2 text-black bg-[#E8E8E8] outline-none focus:ring-2 focus:ring-[#5D9C42] rounded-lg"
                         />
+                        {errors.confirmPassword && <span className='text-red-500 text-xs' >{errors.confirmPassword}</span>}
                     </div>
 
                 </form>
 
-                <Button 
+                <Button
+                onClick={handleSubmit} 
                 text={'Enviar'}
                 className={'bg-green-600 text-white rounded-lg mt-8 p-2 px-7 transition-all duration-300 cursor-pointer border border-transparent hover:border-green-600 hover:bg-white hover:text-green-600 hover:shadow-lg'}
                 />
