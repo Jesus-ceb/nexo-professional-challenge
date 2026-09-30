@@ -7,8 +7,10 @@ export const LargeCard = ({category, name, imageURL, className}) => {
             
             {/* image */}
             <div className="w-full lg:w-1/2 xl:w-1/2 h-52 md:h-62 shrink-0">
+
+                {/* si el usuario no sube imagen, muestra la siguiente por defecto */}
                 <img 
-                src={imageURL || "./images/room_hotel.jpg"} 
+                src={imageURL || "/images/sin_imagen.jpg"} 
                 alt="rooom" 
                 className="w-full rounded-md h-full object-cover"
                 />

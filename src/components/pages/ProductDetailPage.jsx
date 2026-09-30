@@ -141,10 +141,6 @@ export const ProductDetailPage = () => {
                 {/* Contenido principal */}
                 <div className="px-6 py-6">
 
-                    {/* <h1 className="text-xl font-bold text-slate-800 mt-6 border-b pb-2">
-                        Nombre
-                    </h1> */}
-
                     <h1 className="text-3xl font-bold text-slate-800">
                         {product.name}
                     </h1>

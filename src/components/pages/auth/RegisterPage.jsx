@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Button } from '../../atoms/Button'
 import { useNavigate } from 'react-router-dom'
+import { registerUser } from '../../../api/authService'
 
 export const RegisterPage = () => {
     
@@ -54,11 +55,18 @@ export const RegisterPage = () => {
         return Object.keys(newErrors).length === 0;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if(!validate()){
             return // It stops here if something failed; it doesn't call the backend yet.
+        }
+
+        try {
+            await registerUser({name, lastName, email, password})
+            navigate('/login')
+        }catch (err){
+            setErrors({general: err.message })
         }
     }
 
@@ -68,7 +76,6 @@ export const RegisterPage = () => {
     return (
         <>
         {/* header */}
-        {/* este header tambien quiero que el color principal sea algo transparente */}
         <header className='bg-[#5D9C42] p-5 '>
 
             <div className='text-white flex items-baseline justify-center gap-2  text-center'>
@@ -100,7 +107,7 @@ export const RegisterPage = () => {
 
         <div className="flex justify-center w-full mt-6 ">
 
-            {/* aqui quiero que el color sea un blanco como gris claro translucido */}
+        
             <div className="bg-gray-100 rounded-2xl shadow-lg w-full max-w-2xl px-6 py-8 ">
 
                 {/* Título centrado horizontalmente */}

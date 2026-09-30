@@ -118,9 +118,9 @@ export const HomePage = () => {
                         key={product.id} 
                         className ='max-w-3xl rounded-lg cursor-pointer transition duration-200 hover:shadow-lg '
                         >
-
+                            {/* Displays a default image if the user does not upload photos. */}
                             <LargeCard
-                            imageURL={product.images?.[0].url}
+                            imageURL={product.images?.[0]?.url}
                             className='' 
                             name={product.name}
                             category={product.category?.category}
@@ -129,6 +129,8 @@ export const HomePage = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* Renders the inter-page navigation controls ("Previous" and "Next") along with the current page indicator. */}
 
                 {totalPages > 1 && (
                     <div className="flex justify-center items-center gap-4 mt-8">
