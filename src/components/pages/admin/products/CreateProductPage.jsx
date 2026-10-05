@@ -2,10 +2,13 @@ import { useEffect, useState } from "react"
 import { Button } from "../../../atoms/Button"
 
 import { createProduct, getCategories, getCities, uploadProductImage } from "../../../../api/productService"
+import { useAuth } from "../../../../context/AuthContext"
 
 // import { getCategories, getCities, createProduct } from '../../../api/productService';
 
 export const CreateProductPage = () => {
+
+    const { token } = useAuth()
 
      // usestate product name
     const [productName, setProductName] = useState('')
@@ -94,12 +97,12 @@ export const CreateProductPage = () => {
             images: []
         }
 
-        const createdProduct = await createProduct(productData)
+        const createdProduct = await createProduct(productData, token)
 
         // This is where imageFiles connects with ProductImage
         // Each file is uploaded individually to the newly created product's image endpoint.
         for (const file of imageFiles){
-            await uploadProductImage(createdProduct.id, file)
+            await uploadProductImage(createdProduct.id, file, token)
         }
 
         alert('Producto creado con exito');

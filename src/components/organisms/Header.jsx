@@ -52,6 +52,16 @@ export const Header = () => {
                         </span>
                     </button>
 
+                    {/* Only administrators see the shortcut to the admin panel */}
+                    {user.role === 'ADMIN' && (
+                        <button
+                            onClick={() => navigate('/admin/dashboard')}
+                            className="text-[#5D9C42] font-semibold cursor-pointer hover:underline transition-all"
+                        >
+                            Panel admin
+                        </button>
+                    )}
+
                     <button
                         onClick={handleLogout}
                         className="text-[#5D9C42] font-semibold cursor-pointer hover:underline transition-all"

@@ -17,6 +17,8 @@ import { LoginPage } from "../components/pages/auth/LoginPage"
 // logged-in user routes
 import { ProtectedRoute } from "./ProtectedRoute"
 import { ProfilePage } from "../components/pages/ProfilePage"
+// admin-only routes
+import { AdminRoute } from "./AdminRoute"
 
 
 
@@ -25,8 +27,8 @@ export const AppRouter = () => {
             <>
             <Routes>
 
-                {/* La URL "/admin" y sus rutas hijas */}
-                <Route path="/admin" element={<AdminPanel/>}>
+                {/* La URL "/admin" y sus rutas hijas (solo para usuarios con rol ADMIN) */}
+                <Route path="/admin" element={<AdminRoute><AdminPanel/></AdminRoute>}>
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="products" element={<ProductsPage />} />
                     <Route path="products/new" element={<CreateProductPage />} />

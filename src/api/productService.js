@@ -25,29 +25,31 @@ export async function getProducts() {
 
 }
 
-export async function createProduct(productData) {
-    
+// Write operations are admin only: they send the session token and the backend answers 403 to a USER.
+export async function createProduct(productData, token) {
+
     const res = await fetch(`${BASE_URL}/products`, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(productData),
     });
 
     if (!res.ok) {
         const errorMessage = await res.text() //We read the actual message from the backend.
-        throw new Error(errorMessage)
+        throw new Error(errorMessage || 'Error al crear el producto')
     }
 
     return res.json();
 }
 
-export async function uploadProductImage(productId, file ){
+export async function uploadProductImage(productId, file, token){
 
     const formData = new FormData();
     formData.append('file', file)
 
     const res = await fetch(`${BASE_URL}/products/${productId}/images/upload`, {
         method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
         body: formData
     });
 
@@ -57,12 +59,13 @@ export async function uploadProductImage(productId, file ){
 
 }
 
-export async function deleteProduct(id) {
+export async function deleteProduct(id, token) {
     const res = await fetch(`${BASE_URL}/products/${id}`, {
         method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) throw new Error('Error al eliminar el producto');
-    
+
 }
 
 //Find product by id

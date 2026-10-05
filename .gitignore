@@ -25,6 +25,7 @@ dist-ssr
 
 # Dependencias (esta es la más pesada, nunca se sube)
 node_modules/
+graphify-out/
 
 # Archivos del sistema de Mac (muy importante en tu caso)
 .DS_Store

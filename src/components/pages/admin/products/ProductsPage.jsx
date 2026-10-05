@@ -3,12 +3,14 @@ import { Button } from "../../../atoms/Button"
 import { useEffect, useState } from "react"
 
 import { deleteProduct, getProducts } from "../../../../api/productService"
+import { useAuth } from "../../../../context/AuthContext"
 
 
 
 export const ProductsPage = () => {
-    
+
     const navigate = useNavigate()
+    const { token } = useAuth()
 
     const [products, setProducts] = useState([])
     const [error, setError] = useState(null)
@@ -25,7 +27,7 @@ export const ProductsPage = () => {
         if(!confirmDelete) return;
 
         try{
-            await deleteProduct(id);
+            await deleteProduct(id, token);
             setProducts((prev) => prev.filter((p) => p.id !== id));
         }catch (err){
             setError(err.message)
@@ -45,6 +47,8 @@ export const ProductsPage = () => {
 
             <div className="mt-4 w-fit p-1.5 bg-white text-blue-900 rounded-sm">
                 <p>Listado de productos</p>
+
+                {error && <p className="text-red-500 text-sm">{error}</p>}
 
                 <table className="w-full text-left border-collapse">
         
