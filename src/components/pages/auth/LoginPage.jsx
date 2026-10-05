@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../../atoms/Button'
+import { loginUser } from '../../../api/authService'
+import { useAuth } from '../../../context/AuthContext'
 
 export const LoginPage = () => {
 
     const navigate = useNavigate()
+    const { login } = useAuth()
 
     // one state for each form field
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    // subject to errors, one key per field
+    // subject to errors, one key per field (+ "general" for backend errors)
     const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(false)
 
     // validates the entire form
     const validate = () => {
@@ -37,11 +41,23 @@ export const LoginPage = () => {
         return Object.keys(newErrors).length === 0;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if(!validate()){
             return // It stops here if something failed; it doesn't call the backend yet.
+        }
+
+        try {
+            setLoading(true)
+            const { token, user } = await loginUser(email, password)
+            login(token, user) // saves the session in the context + localStorage
+            navigate('/')
+        } catch (err) {
+            // e.g. "Correo o contraseña incorrectos" from the backend
+            setErrors({ general: err.message })
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -85,9 +101,16 @@ export const LoginPage = () => {
         
                         {/* Título centrado horizontalmente */}
                         <h1 className="text-3xl font-bold text-[#5D9C42] text-center mb-8">
-                            iniciar Sesion
+                            Iniciar sesión
                         </h1>
-        
+
+                        {/* Backend error, e.g. "Correo o contraseña incorrectos" */}
+                        {errors.general && (
+                            <div className="bg-red-100 text-red-600 text-sm p-3 rounded-lg mb-4 text-center">
+                                {errors.general}
+                            </div>
+                        )}
+
                         <form className="grid gap-x-6 gap-y-5">
         
         
@@ -118,8 +141,8 @@ export const LoginPage = () => {
                         </form>
         
                         <Button
-                        onClick={handleSubmit} 
-                        text={'Enviar'}
+                        onClick={loading ? undefined : handleSubmit}
+                        text={loading ? 'Ingresando...' : 'Enviar'}
                         className={'bg-green-600 text-white rounded-lg mt-8 p-2 px-7 transition-all duration-300 cursor-pointer border border-transparent hover:border-green-600 hover:bg-white hover:text-green-600 hover:shadow-lg'}
                         />
         

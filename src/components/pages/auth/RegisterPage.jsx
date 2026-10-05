@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Button } from '../../atoms/Button'
 import { useNavigate } from 'react-router-dom'
-import { registerUser } from '../../../api/authService'
+import { registerUser, loginUser } from '../../../api/authService'
+import { useAuth } from '../../../context/AuthContext'
 
 export const RegisterPage = () => {
-    
+
     const navigate = useNavigate()
+    const { login } = useAuth()
 
     // one state for each form field
     const [name, setName] = useState('')
@@ -64,9 +66,18 @@ export const RegisterPage = () => {
 
         try {
             await registerUser({name, lastName, email, password})
-            navigate('/login')
         }catch (err){
             setErrors({general: err.message })
+            return
+        }
+
+        // Automatic login after registering, so the user doesn't have to type the credentials again.
+        try {
+            const { token, user } = await loginUser(email, password)
+            login(token, user)
+            navigate('/')
+        } catch {
+            navigate('/login') // the account was created; the user can log in manually
         }
     }
 
@@ -179,6 +190,8 @@ export const RegisterPage = () => {
                     </div>
 
                 </form>
+
+                {errors.general && <span className="text-red-500 text-sm block mt-4">{errors.general}</span>}
 
                 <Button
                 onClick={handleSubmit} 
