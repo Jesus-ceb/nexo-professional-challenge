@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 import { deleteProduct, getProducts } from "../../../../api/productService"
 import { useAuth } from "../../../../context/AuthContext"
+import { EditProductModal } from "../../../organisms/EditProductModal"
 
 
 
@@ -14,6 +15,14 @@ export const ProductsPage = () => {
 
     const [products, setProducts] = useState([])
     const [error, setError] = useState(null)
+    // product being edited in the floating form (null = closed)
+    const [editingProduct, setEditingProduct] = useState(null)
+
+    // replaces the edited product in the list and closes the form
+    const handleSaved = (updated) => {
+        setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+        setEditingProduct(null);
+    }
 
     // When assembling the component, it requests the actual products from the backend.
     useEffect(() => {
@@ -74,9 +83,9 @@ export const ProductsPage = () => {
                                 <td className="p-4 border-b ">{item.address?.direction}</td>
                                 <td className="p-4 border-b ">{item.city?.city}</td>
                                 <td className="p-4 border-b ">{item.description}</td>
-                                <td className="p-4 border-b ">{item.add_attributes}</td>
                                 <td className="p-4 border-b text-center">
-                                    <button 
+                                    <button
+                                    onClick={() => setEditingProduct(item)}
                                     className="text-blue-600 hover:underline cursor-pointer"
                                     >
                                         Editar
@@ -101,8 +110,16 @@ export const ProductsPage = () => {
             </div>
 
 
+            {editingProduct && (
+                <EditProductModal
+                product={editingProduct}
+                onClose={() => setEditingProduct(null)}
+                onSaved={handleSaved}
+                />
+            )}
+
         </div>
-        
+
         </>
         
     )

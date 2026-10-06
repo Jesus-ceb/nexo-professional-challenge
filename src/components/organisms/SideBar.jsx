@@ -1,11 +1,12 @@
 
-import { BsArchive, BsCardChecklist, BsFillHouseFill, BsGearFill, BsGrid3X3GapFill, BsPeopleFill, BsReverseLayoutTextWindowReverse } from "react-icons/bs"
+import { BsArchive, BsCardChecklist, BsFillHouseFill, BsGearFill, BsGrid3X3GapFill, BsPeopleFill, BsReverseLayoutTextWindowReverse, BsStars } from "react-icons/bs"
 import { Link } from "react-router-dom"
 
 const menuItems = [
     { name: 'Dashboard', icon: <BsReverseLayoutTextWindowReverse/>, path: '/admin/dashboard'},
     { name: 'Productos', icon: <BsArchive/>, path: '/admin/products'},
     { name: 'Categorias', icon: <BsGrid3X3GapFill/>, path: '/admin/categories'},
+    { name: 'Admin Features', icon: <BsStars/>, path: '/admin/features'},
     { name: 'clientes', icon: <BsPeopleFill/>, path: '/admin/customers'},
     { name: 'Inventario', icon: <BsCardChecklist/>, path: '/admin/inventory'},
     { name: 'Configuracion', icon: <BsGearFill />, path: '/admin/setup'}

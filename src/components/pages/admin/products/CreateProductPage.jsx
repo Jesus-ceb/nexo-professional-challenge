@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "../../../atoms/Button"
 
 import { createProduct, getCategories, getCities, uploadProductImage } from "../../../../api/productService"
+import { createFeature, getFeatures } from "../../../../api/featureService"
 import { useAuth } from "../../../../context/AuthContext"
+import { FeatureForm } from "../../../molecules/FeatureForm"
+import { FeatureSelector } from "../../../molecules/FeatureSelector"
 
 // import { getCategories, getCities, createProduct } from '../../../api/productService';
 
 export const CreateProductPage = () => {
 
     const { token } = useAuth()
+    const navigate = useNavigate()
 
      // usestate product name
     const [productName, setProductName] = useState('')
@@ -34,11 +39,26 @@ export const CreateProductPage = () => {
     const [categories, setCategories] = useState([])
     // ------- actual list of cities -----
     const [cities, setCities] = useState([])
+    // ------- actual list of features + the ones selected for this product -----
+    const [features, setFeatures] = useState([])
+    const [featureIds, setFeatureIds] = useState([])
     // ------- show errors to the user ------
     const [error, setError] = useState(null)
 
     // visual feedback while climbing
     const [uploading, setUploading] = useState(false)
+
+    // "Añadir nueva" block for features inside this form
+    const [showFeatureForm, setShowFeatureForm] = useState(false)
+
+    // Saves the feature right away (it is global), adds it already checked for this product
+    // and hides the block. Errors are shown inside the block.
+    const handleCreateFeature = async (featureData) => {
+        const created = await createFeature(featureData, token)
+        setFeatures((prev) => [...prev, created])
+        setFeatureIds((prev) => [...prev, created.id])
+        setShowFeatureForm(false)
+    }
 
 
     // function to clear all form fields
@@ -48,15 +68,17 @@ export const CreateProductPage = () => {
         setDescription('');
         setCategoryId('');
         setCityId('');
+        setFeatureIds([]);
         setImageFiles([]);
         setPreviews([]);
     } 
 
 
-    //Call the API to retrieve real categories and cities.
+    //Call the API to retrieve real categories, cities and features.
     useEffect(() => {
         getCategories().then(setCategories).catch(()=> setError('No se pudieron cargar las categorias'));
         getCities().then(setCities).catch(() => setError('No se cargaron las ciudades'));
+        getFeatures().then(setFeatures).catch(() => setError('No se cargaron las características'));
 
     }, []);
 
@@ -94,6 +116,7 @@ export const CreateProductPage = () => {
             category: { id: Number(categoryId)},
             city: { id: Number(cityId)},
             address: { direction:direction},
+            features: featureIds.map((id) => ({ id })),
             images: []
         }
 
@@ -219,6 +242,29 @@ export const CreateProductPage = () => {
                         />
                     </div>
 
+                    {/* Features box: one or more */}
+                    <div className="flex flex-col gap-2 col-span-2">
+                        <label className="text-sm font-semibold text-slate-700">Características</label>
+
+                        {showFeatureForm ? (
+                            <FeatureForm
+                            title="Nueva característica"
+                            onSave={handleCreateFeature}
+                            onCancel={() => setShowFeatureForm(false)}
+                            />
+                        ) : (
+                            <button
+                            type="button"
+                            onClick={() => setShowFeatureForm(true)}
+                            className="w-fit rounded-sm bg-[#5D9C42] p-1.5 px-6 text-white cursor-pointer hover:bg-white transition-all duration-300 hover:text-[#5D9C42] border border-[#5D9C42]"
+                            >
+                                Añadir nueva
+                            </button>
+                        )}
+
+                        <FeatureSelector features={features} selectedIds={featureIds} onChange={setFeatureIds} />
+                    </div>
+
                     {/* Images box */}
                     <div className="flex flex-col gap-1 col-span-2">
                         <label className="text-sm font-semibold text-slate-700">Imagenes</label>
@@ -260,13 +306,21 @@ export const CreateProductPage = () => {
 
                 </form>
 
-                {/* Send button  */}
-                <Button
-                onClick={handleclick}
-                text={'Guardar'}
-                disabled={uploading}
-                className={'bg-green-600 text-white rounded-lg mt-2.5 p-2 px-6 transition-all duration-300 cursor-pointer border border-transparent hover:border-green-600 hover:bg-white hover:text-green-600 '}
-                />
+                {/* Send / cancel buttons  */}
+                <div className="flex gap-3 mt-2.5">
+                    <Button
+                    onClick={handleclick}
+                    text={'Guardar'}
+                    disabled={uploading}
+                    className={'bg-green-600 text-white rounded-lg p-2 px-6 transition-all duration-300 cursor-pointer border border-transparent hover:border-green-600 hover:bg-white hover:text-green-600 '}
+                    />
+                    {/* Back to the products list without saving */}
+                    <Button
+                    onClick={() => navigate('/admin/products')}
+                    text={'Cancelar'}
+                    className={'rounded-lg p-2 px-6 border border-slate-400 text-slate-600 cursor-pointer hover:bg-slate-100 transition-all duration-300'}
+                    />
+                </div>
             </div>
 
         </div>

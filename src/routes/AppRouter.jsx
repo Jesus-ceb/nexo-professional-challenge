@@ -8,6 +8,7 @@ import { InventoryPage } from "../components/pages/admin/inventory/InventoryPage
 import { CategoriesPage } from "../components/pages/admin/categories/CategoriesPage"
 import { SetupPage } from "../components/pages/admin/setup/SetupPage"
 import { CreateProductPage } from "../components/pages/admin/products/CreateProductPage"
+import { FeaturesPage } from "../components/pages/admin/features/FeaturesPage"
 // main routes  
 import { HomePage } from "../components/pages/HomePage"
 import { ProductDetailPage } from "../components/pages/ProductDetailPage"
@@ -35,6 +36,7 @@ export const AppRouter = () => {
                     <Route path="customers" element={<CustomersPage />} />
                     <Route path="inventory" element={<InventoryPage />} />
                     <Route path="categories" element={<CategoriesPage />} />
+                    <Route path="features" element={<FeaturesPage />} />
                     <Route path="setup" element={<SetupPage />} />
                 </Route>
                 

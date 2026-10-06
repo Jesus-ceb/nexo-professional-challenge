@@ -59,6 +59,32 @@ export async function uploadProductImage(productId, file, token){
 
 }
 
+// Replaces name, description, category, city, address and features (images are handled separately).
+export async function updateProduct(id, productData, token) {
+
+    const res = await fetch(`${BASE_URL}/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(productData),
+    });
+
+    if (!res.ok) throw new Error('Error al actualizar el producto');
+
+    return res.json();
+}
+
+export async function deleteProductImage(productId, imageId, token) {
+
+    const res = await fetch(`${BASE_URL}/products/${productId}/images/${imageId}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (!res.ok) throw new Error('Error al eliminar la imagen');
+
+    return res.json();
+}
+
 export async function deleteProduct(id, token) {
     const res = await fetch(`${BASE_URL}/products/${id}`, {
         method: 'DELETE',
