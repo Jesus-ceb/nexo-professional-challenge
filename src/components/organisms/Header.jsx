@@ -38,19 +38,32 @@ export const Header = () => {
             <div className="flex px-1 text-xs sm:px-1 sm:py-0.5 md:px-3 md:py-1 md:text-sm  lg:px-5 lg:py-2 items-center gap-3 w-fit justify-end">
                 {isAuthenticated ? (
                     <>
-                    {/* Avatar with initials + name, both open the profile */}
-                    <button
-                    onClick={() => navigate('/mi-perfil')}
-                    className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-                    aria-label="Ver mi perfil"
-                    >
-                        <span className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[#5D9C42] text-white flex items-center justify-center font-bold">
+                    {/* Avatar with initials + name, both open the profile; "Cerrar sesión" sits under the name */}
+                    <div className="flex items-center gap-2">
+                        <button
+                        onClick={() => navigate('/mi-perfil')}
+                        className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[#5D9C42] text-white flex items-center justify-center font-bold cursor-pointer hover:opacity-80 transition-opacity"
+                        aria-label="Ver mi perfil"
+                        >
                             {getInitials(user.name, user.lastName)}
-                        </span>
-                        <span className="hidden sm:block font-semibold text-[#5D9C42]">
-                            {user.name} {user.lastName}
-                        </span>
-                    </button>
+                        </button>
+
+                        <div className="flex flex-col items-start leading-tight">
+                            <button
+                            onClick={() => navigate('/mi-perfil')}
+                            className="hidden sm:block font-semibold text-[#5D9C42] cursor-pointer hover:opacity-80 transition-opacity"
+                            >
+                                {user.name} {user.lastName}
+                            </button>
+
+                            <button
+                                onClick={handleLogout}
+                                className="text-xs text-[#5D9C42] underline cursor-pointer hover:opacity-80 transition-opacity"
+                            >
+                                Cerrar sesión
+                            </button>
+                        </div>
+                    </div>
 
                     {/* Only administrators see the shortcut to the admin panel */}
                     {user.role === 'ADMIN' && (
@@ -61,13 +74,6 @@ export const Header = () => {
                             Panel admin
                         </button>
                     )}
-
-                    <button
-                        onClick={handleLogout}
-                        className="text-[#5D9C42] font-semibold cursor-pointer hover:underline transition-all"
-                    >
-                        Cerrar sesión
-                    </button>
 
                     {/* <Button
                     onClick={handleLogout}

@@ -102,7 +102,7 @@ export const HomePage = () => {
             </div>
 
             {/* Large Cards section 2 */}
-            <div className='bg-[#F0F7ED] pt-8 pb-10 px- md:px-10'>
+            <div className='bg-[#F0F7ED] pt-8 pb-10 px-4 md:px-10'>
 
                 <h2 className='text-2xl md:text-3xl font-bold text-[#5D9C42]   w-fit '>
                 Recomendaciones
@@ -116,14 +116,15 @@ export const HomePage = () => {
                         <div
                         onClick={() => navigate(`/products/${product.id}`)} 
                         key={product.id} 
-                        className ='max-w-3xl rounded-lg cursor-pointer transition duration-200 hover:shadow-lg '
+                        className ='max-w-3xl h-full rounded-lg cursor-pointer transition duration-200 hover:shadow-lg '
                         >
                             {/* Displays a default image if the user does not upload photos. */}
                             <LargeCard
                             imageURL={product.images?.[0]?.url}
-                            className='' 
                             name={product.name}
                             category={product.category?.category}
+                            location={product.city?.city}
+                            features={product.features}
                             />
 
                         </div>

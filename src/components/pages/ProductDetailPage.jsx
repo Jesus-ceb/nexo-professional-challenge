@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getProductById, getProducts } from '../../api/productService'
 import { RiArrowLeftCircleLine, RiMapPinLine } from 'react-icons/ri'
 import { GalleryModal } from '../organisms/GalleryModal'
+import { ProductFeatures } from '../molecules/ProductFeatures'
 
 export const ProductDetailPage = () => {
 
@@ -152,6 +153,9 @@ export const ProductDetailPage = () => {
                     <p className="mt-2 text-slate-600 leading-relaxed">
                         {product.description}
                     </p>
+
+                    {/* Características */}
+                    <ProductFeatures features={product.features} />
                 </div>
             </div>
 
