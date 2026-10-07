@@ -2,6 +2,7 @@ import { Header } from '../organisms/Header'
 import { Footer } from '../organisms/Footer'
 import { useAuth } from '../../context/AuthContext'
 import { getInitials } from '../../utils/getInitials'
+import { ResendEmailButton } from '../molecules/ResendEmailButton'
 
 // Personal information of the logged-in user (only reachable through ProtectedRoute).
 export const ProfilePage = () => {
@@ -38,6 +39,14 @@ export const ProfilePage = () => {
                         <dd className="p-2 text-black bg-[#E8E8E8] rounded-lg break-all">{user.email}</dd>
                     </div>
                 </dl>
+
+                {/* resend the registration confirmation email */}
+                <div className="w-full flex flex-col gap-2 border-t border-slate-300 pt-5">
+                    <p className="text-sm text-slate-600 text-center">
+                        ¿No recibiste el correo de confirmación de registro?
+                    </p>
+                    <ResendEmailButton />
+                </div>
 
             </div>
         </main>

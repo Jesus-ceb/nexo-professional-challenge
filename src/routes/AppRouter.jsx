@@ -15,6 +15,7 @@ import { ProductDetailPage } from "../components/pages/ProductDetailPage"
 // urls auth
 import { RegisterPage } from "../components/pages/auth/RegisterPage"
 import { LoginPage } from "../components/pages/auth/LoginPage"
+import { RegistrationSuccessPage } from "../components/pages/auth/RegistrationSuccessPage"
 // logged-in user routes
 import { ProtectedRoute } from "./ProtectedRoute"
 import { ProfilePage } from "../components/pages/ProfilePage"
@@ -47,6 +48,7 @@ export const AppRouter = () => {
                 {/* URLs de auth */}
                 <Route path="/register" element={<RegisterPage/>} />
                 <Route path="/login" element={<LoginPage/>} />
+                <Route path="/registro-exitoso" element={<ProtectedRoute><RegistrationSuccessPage/></ProtectedRoute>} />
 
                 {/* Solo para usuarios con sesión iniciada */}
                 <Route path="/mi-perfil" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />

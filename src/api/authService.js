@@ -51,6 +51,30 @@ export async function loginUser(email, password) {
     return res.json();
 }
 
+// Sends the registration confirmation email again. 429: asked too soon, the backend says how long to wait.
+export async function resendConfirmationEmail(token) {
+    let res;
+    try {
+        res = await fetch(`${BASE_URL}/users/me/resend-confirmation`, {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    } catch {
+        throw new Error('No se pudo conectar con el servidor. Inténtalo más tarde.');
+    }
+
+    if (res.status === 429) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || 'Espera un momento antes de reenviar el correo');
+    }
+
+    if (!res.ok) {
+        throw new Error('No se pudo reenviar el correo. Inténtalo de nuevo.');
+    }
+
+    return res.json();
+}
+
 // Returns the personal data of the logged-in user. 401 means the token expired or is invalid.
 export async function getMe(token) {
     const res = await fetch(`${BASE_URL}/users/me`, {

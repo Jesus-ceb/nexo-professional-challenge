@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '../../atoms/Button'
 import { loginUser } from '../../../api/authService'
 import { useAuth } from '../../../context/AuthContext'
@@ -9,8 +9,11 @@ export const LoginPage = () => {
     const navigate = useNavigate()
     const { login } = useAuth()
 
+    // ?email= comes from the link in the confirmation email, so the field starts filled
+    const [searchParams] = useSearchParams()
+
     // one state for each form field
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState(searchParams.get('email') ?? '')
     const [password, setPassword] = useState('')
 
     // subject to errors, one key per field (+ "general" for backend errors)

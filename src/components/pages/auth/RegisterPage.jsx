@@ -75,7 +75,7 @@ export const RegisterPage = () => {
         try {
             const { token, user } = await loginUser(email, password)
             login(token, user)
-            navigate('/')
+            navigate('/registro-exitoso') // confirms the registration and offers to resend the email
         } catch {
             navigate('/login') // the account was created; the user can log in manually
         }
