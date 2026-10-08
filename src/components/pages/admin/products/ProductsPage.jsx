@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { Button } from "../../../atoms/Button"
+import { Loader } from "../../../atoms/Loader"
 import { useEffect, useState } from "react"
 
 import { deleteProduct, getProducts } from "../../../../api/productService"
@@ -15,6 +16,7 @@ export const ProductsPage = () => {
 
     const [products, setProducts] = useState([])
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
     // product being edited in the floating form (null = closed)
     const [editingProduct, setEditingProduct] = useState(null)
 
@@ -26,7 +28,10 @@ export const ProductsPage = () => {
 
     // When assembling the component, it requests the actual products from the backend.
     useEffect(() => {
-        getProducts().then(setProducts).catch(() => setError('Error al cargar los productos'));
+        getProducts()
+        .then(setProducts)
+        .catch(() => setError('Error al cargar los productos'))
+        .finally(() => setLoading(false));
     }, []);
 
 
@@ -75,7 +80,16 @@ export const ProductsPage = () => {
 
                     {/* Cuerpo de la tabla */}
                     <tbody className="text-slate-700">
-                        {/* Aquí se hace .map() de tus productos de Nexo más adelante */}
+                        {loading && (
+                            <tr>
+                                <td colSpan={7}><Loader text="Cargando productos..."/></td>
+                            </tr>
+                        )}
+                        {!loading && !error && products.length === 0 && (
+                            <tr>
+                                <td colSpan={7} className="p-4 border-b text-center">No hay productos registrados</td>
+                            </tr>
+                        )}
                         {products.map((item) => (
                             <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="p-4 border-b">{item.name}</td>

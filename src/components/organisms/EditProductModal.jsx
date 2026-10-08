@@ -84,10 +84,10 @@ export const EditProductModal = ({ product, onClose, onSaved }) => {
             await updateProduct(product.id, {
                 name: productName.trim(),
                 description,
-                category: { id: Number(categoryId) },
-                city: { id: Number(cityId) },
-                address: { direction },
-                features: featureIds.map((id) => ({ id })),
+                categoryId: Number(categoryId),
+                cityId: Number(cityId),
+                address: direction,
+                featureIds,
             }, token)
 
             for (const imageId of removedImageIds) {

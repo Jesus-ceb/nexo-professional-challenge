@@ -3,6 +3,7 @@ import { SearchSection } from "../organisms/SearchSection"
 import { SmallCards } from "../molecules/SmallCards"
 import { ProductGrid } from "../organisms/ProductGrid"
 import { Footer } from "../organisms/Footer"
+import { Loader } from "../atoms/Loader"
 import { useEffect, useMemo, useState } from "react"
 import { getCategories, getProducts } from "../../api/productService"
 import { countByCategory, getRandomCategoryImage, pluralizeCategory } from "../../utils/categoryUtils"
@@ -20,7 +21,8 @@ export const HomePage = () => {
     // product status
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
-    const [, setError] = useState(null)
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
 
 
     // shuffle Products
@@ -42,8 +44,9 @@ export const HomePage = () => {
         })
         .catch((err) => {
             console.error("ERROR:", err);
-            setError("No se pudieron cargar los productos");
-        });
+            setError("No se pudieron cargar los productos. Intenta de nuevo más tarde.");
+        })
+        .finally(() => setLoading(false));
 
 
 
@@ -86,6 +89,8 @@ export const HomePage = () => {
                 </span>
 
                 {/* div de smallcards */}
+                {loading && <Loader text="Cargando categorías..."/>}
+
                 <div className='grid grid-cols-1 m-1 mx-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6'>
                 {categoryCards.map((card) => (
                     <SmallCards
@@ -108,7 +113,15 @@ export const HomePage = () => {
                 Recomendaciones
                 </h2>
 
-                <ProductGrid products={products}/>
+                {loading ? (
+                    <Loader text="Cargando alojamientos..."/>
+                ) : error ? (
+                    <p className='mt-6 text-center text-red-600'>{error}</p>
+                ) : products.length === 0 ? (
+                    <p className='mt-6 text-center text-slate-600'>No hay alojamientos para mostrar</p>
+                ) : (
+                    <ProductGrid products={products}/>
+                )}
 
             </div>
 

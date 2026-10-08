@@ -1,3 +1,5 @@
+import { readErrorMessage } from './apiError';
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 // Returns every registered user: { id, name, lastName, email, role }. Admin only.
@@ -22,7 +24,7 @@ export async function updateUserRole(id, role, token) {
 
     // 409: the backend explains why (parent account or own admin role can't be removed)
     if (res.status === 409) {
-        throw new Error(await res.text());
+        throw new Error(await readErrorMessage(res, 'No se pudo actualizar el rol'));
     }
 
     if (!res.ok) throw new Error('No se pudo actualizar el rol');

@@ -286,7 +286,151 @@ Usuario interactúa → Página (useState) → api/productService.js → Backend
                           ↓
                   Re-render de componentes hijos (props)
 ```
- 
+
+
+---
+
+# 🚀 Sprint 2 - Nuevas Funcionalidades (Frontend)
+
+## 📋 Resumen del Sprint
+
+| Issue | Funcionalidad | Archivos principales |
+|---|---|---|
+| Registro / Login | Registro e inicio de sesión con validación de campos | `RegisterPage`, `LoginPage`, `authService` |
+| #14 Identificar usuario | Sesión con JWT, avatar con iniciales en el Header, perfil y rutas protegidas | `AuthContext`, `AuthProvider`, `ProtectedRoute`, `ProfilePage`, `getInitials` |
+| #16 Identificar administrador | Panel solo para ADMIN y gestión de roles de usuarios | `AdminRoute`, `CustomersPage`, `userService` |
+| #17 Características de producto | CRUD de características, asignarlas a productos y editar producto | `FeaturesPage`, `FeatureForm`, `FeatureSelector`, `EditProductModal`, `featureService`, `featureIcons` |
+| #18 Ver características | "¿Qué ofrece este lugar?" en el detalle, íconos en las tarjetas y lightbox de imágenes | `ProductFeatures`, `ImageLightbox` |
+| #19 Confirmar registro | Página de registro exitoso y reenvío del correo de confirmación | `RegistrationSuccessPage`, `ResendEmailButton` |
+| #20 Sección de categorías | Tarjetas por categoría, filtro por una o varias categorías y limpiar filtros | `CategoryFilterBar`, `ProductGrid`, `CategoryProductsPage`, `categoryUtils`, `SmallCards` |
+
+## ✨ Funcionalidades Agregadas
+
+### Autenticación de Usuarios
+- ✅ **Registro**: Formulario con nombre, apellido, correo y contraseña, con validación de campos y aviso de correo duplicado
+- ✅ **Confirmación de registro**: Página de registro exitoso y envío de un correo de confirmación, con botón para reenviarlo (espera de 60 s entre envíos)
+- ✅ **Inicio de sesión**: Login con JWT; el token y el usuario se guardan en `localStorage` para mantener la sesión tras recargar
+- ✅ **Identificación del usuario**: El Header muestra un avatar con las iniciales y el nombre del usuario, más el botón "Cerrar sesión"
+- ✅ **Perfil de usuario**: Página `/mi-perfil` con los datos de la cuenta, cargados desde `GET /users/me`
+- ✅ **Rutas protegidas**: `ProtectedRoute` (requiere sesión) y `AdminRoute` (requiere rol ADMIN)
+
+### Funcionalidades Públicas
+- ✅ **Búsqueda por tipo de alojamiento**: Una tarjeta por cada categoría registrada en el backend, con la cantidad de alojamientos, una imagen aleatoria de sus productos y sombra al pasar el mouse
+- ✅ **Filtro por categorías**: Página `/productos?categorias=1,3` (con Header, SearchSection, botón de volver y Footer) para filtrar por una o varias categorías, con el texto "Mostrando X de Y alojamientos", chips seleccionables y botón "Limpiar filtros"
+- ✅ **Filtro en la URL**: Se puede compartir el enlace, funciona con "atrás" y se mantiene al recargar
+- ✅ **Características del alojamiento**: Bloque "¿Qué ofrece este lugar?" en el detalle con el ícono de cada característica; las `LargeCard` también muestran las características
+- ✅ **Lightbox de imágenes**: Foto ampliada sobre fondo oscuro, que se recorre con flechas o con el teclado
+
+### Panel de Administración
+- ✅ **Acceso restringido**: Solo usuarios con rol ADMIN. Un invitado va a `/login` y un usuario sin permisos va al Home
+- ✅ **Editar alojamiento**: Modal de edición con datos, características e imágenes
+- ✅ **Administrar características**: Crear, editar y eliminar características (nombre + ícono de Remix Icon) y asignarlas a cada producto
+- ✅ **Gestión de administradores**: Listado de usuarios con su rol y botón "Hacer admin / Quitar admin". Un admin no puede quitarse su propio rol
+
+## 🏗️ Nuevos Archivos
+
+```
+src/
+├── api/
+│   ├── authService.js           # Registro, login, perfil, reenvío de confirmación
+│   ├── userService.js           # Listado de usuarios y cambio de rol (admin)
+│   └── featureService.js        # CRUD de características (admin)
+├── components/
+│   ├── molecules/
+│   │   ├── CategoryFilterBar.jsx  # Chips para filtrar por una o varias categorías
+│   │   ├── ProductFeatures.jsx    # "¿Qué ofrece este lugar?"
+│   │   ├── FeatureForm.jsx        # Crear / editar característica
+│   │   ├── FeatureSelector.jsx    # Asignar características a un producto
+│   │   └── ResendEmailButton.jsx  # Reenvío del correo de confirmación
+│   ├── organisms/
+│   │   ├── ImageLightbox.jsx      # Foto ampliada con navegación
+│   │   ├── ProductGrid.jsx        # Grid de LargeCards con paginación
+│   │   └── EditProductModal.jsx   # Edición de un producto (admin)
+│   └── pages/
+│       ├── CategoryProductsPage.jsx  # Resultados filtrados por categoría
+│       ├── ProfilePage.jsx
+│       ├── auth/
+│       │   ├── LoginPage.jsx
+│       │   ├── RegisterPage.jsx
+│       │   └── RegistrationSuccessPage.jsx
+│       └── admin/
+│           └── features/
+│               └── FeaturesPage.jsx
+├── context/
+│   ├── AuthContext.js           # Contexto + hook useAuth()
+│   └── AuthProvider.jsx         # Sesión (token + usuario) persistida en localStorage
+├── data/
+│   └── featureIcons.js          # Íconos disponibles para características
+├── routes/
+│   ├── ProtectedRoute.jsx       # Requiere sesión iniciada
+│   └── AdminRoute.jsx           # Requiere rol ADMIN
+└── utils/
+    ├── getInitials.js           # Iniciales del avatar
+    └── categoryUtils.js         # Plurales, conteo por categoría, imagen aleatoria
+```
+
+**Archivos modificados**: `SmallCards` (tarjeta dinámica y clicable), `LargeCard`, `Header`, `GalleryModal`, `SideBar`, `HomePage`, `ProductDetailPage`, `CustomersPage`, `CreateProductPage`, `ProductsPage`, `productService`, `AppRouter`.
+
+## 🧭 Nuevas Rutas
+
+| Ruta | Acceso | Página |
+|---|---|---|
+| `/productos?categorias=` | Pública | `CategoryProductsPage` |
+| `/login` | Pública | `LoginPage` |
+| `/register` | Pública | `RegisterPage` |
+| `/registro-exitoso` | Con sesión | `RegistrationSuccessPage` |
+| `/mi-perfil` | Con sesión | `ProfilePage` |
+| `/admin/*` | Solo ADMIN | `AdminPanel` (ahora protegido por `AdminRoute`) |
+| `/admin/features` | Solo ADMIN | `FeaturesPage` |
+
+## 🔌 Nuevos Endpoints Consumidos
+
+| Recurso | Endpoints |
+|---|---|
+| Autenticación | `POST /users/register`, `POST /auth/login` |
+| Usuario | `GET /users/me`, `POST /users/me/resend-confirmation` |
+| Usuarios (admin) | `GET /users`, `PATCH /users/{id}/role` |
+| Características | `GET /features`, `POST /features`, `PUT /features/{id}`, `DELETE /features/{id}` |
+
+Los `GET` del catálogo son públicos; el resto de operaciones envían `Authorization: Bearer <token>` y requieren rol ADMIN.
+
+## 📊 Cambios en la Estructura de Datos
+
+El producto ahora incluye sus características:
+
+```javascript
+features: [
+  { id: number, name: string, icon: string }   // icon: clase de Remix Icon, ej. "ri-wifi-line"
+]
+```
+
+Modelo de usuario:
+
+```javascript
+{ id: number, name: string, lastName: string, email: string, role: "USER" | "ADMIN" }
+```
+
+## 🎨 Decisiones de Diseño del Sprint
+
+### 1. **Sesión con Context API + localStorage**
+- **Flujo**: Al iniciar sesión, el token JWT y el usuario se guardan en `AuthProvider` y en `localStorage`; al recargar, la sesión existe desde el primer render y se refresca con `GET /users/me`. Si el backend responde 401, se cierra la sesión.
+- **Razón**: Cualquier componente (Header, rutas protegidas, panel admin) accede al usuario con `useAuth()` sin pasar props.
+### 2. **Rutas protegidas solo como capa de UI**
+- `ProtectedRoute` y `AdminRoute` ocultan pantallas, pero la seguridad real está en el backend, que responde 401/403.
+### 3. **Filtrado de categorías en el cliente**
+- `GET /products` ya devuelve todos los productos con su categoría, así que el filtro y los conteos se calculan en el navegador sin cambios en el backend.
+### 4. **Filtros en la URL**
+- Las categorías seleccionadas viven en `?categorias=1,3` (`useSearchParams`), no en un estado local: el enlace se puede compartir y el botón "atrás" funciona.
+### 5. **Un servicio por recurso**
+- `productService`, `authService`, `userService` y `featureService` separan la comunicación con cada recurso de la API.
+
+## 🎯 Pendiente para el Próximo Sprint
+
+- ⏳ Gestión de categorías desde el panel admin (agregar categoría con título, descripción e imagen)
+- ⏳ Búsqueda funcional por destino y fechas en la sección de búsqueda del Home
+- ⏳ Reservas de alojamientos
+- ⏳ Dashboard, inventario y configuración del panel admin
+
 ## Autor
  
 Este proyecto fue creado por:

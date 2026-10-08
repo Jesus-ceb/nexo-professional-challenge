@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { getUsers, updateUserRole } from "../../../../api/userService"
+import { Loader } from "../../../atoms/Loader"
 import { useAuth } from "../../../../context/AuthContext"
 
 
@@ -10,10 +11,14 @@ export const CustomersPage = () => {
 
     const [users, setUsers] = useState([])
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     // When assembling the component, it requests the registered users from the backend.
     useEffect(() => {
-        getUsers(token).then(setUsers).catch(() => setError('Error al cargar los usuarios'));
+        getUsers(token)
+        .then(setUsers)
+        .catch(() => setError('Error al cargar los usuarios'))
+        .finally(() => setLoading(false));
     }, [token]);
 
 
@@ -78,7 +83,13 @@ export const CustomersPage = () => {
                             </tr>
                         ))}
 
-                        {!error && users.length === 0 && (
+                        {loading && (
+                            <tr>
+                                <td colSpan={5}><Loader text="Cargando usuarios..."/></td>
+                            </tr>
+                        )}
+
+                        {!loading && !error && users.length === 0 && (
                             <tr>
                                 <td colSpan={5} className="p-4 border-b text-center">No hay usuarios registrados</td>
                             </tr>

@@ -1,11 +1,11 @@
 import { Header } from "../organisms/Header"
 import { Footer } from "../organisms/Footer"
 import { SearchSection } from "../organisms/SearchSection"
+import { Loader } from "../atoms/Loader"
 import { ProductGrid } from "../organisms/ProductGrid"
 import { CategoryFilterBar } from "../molecules/CategoryFilterBar"
 import { useEffect, useMemo, useState } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom"
-import { RiArrowLeftCircleLine } from "react-icons/ri"
+import { useSearchParams } from "react-router-dom"
 import { getCategories, getProducts } from "../../api/productService"
 import { countByCategory, pluralizeCategory } from "../../utils/categoryUtils"
 
@@ -14,12 +14,12 @@ import { countByCategory, pluralizeCategory } from "../../utils/categoryUtils"
 // Search results filtered by one or more categories; the filter lives in the URL (?categorias=1,3).
 export const CategoryProductsPage = () => {
 
-    const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
 
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
 
 
     useEffect(() => {
@@ -30,8 +30,9 @@ export const CategoryProductsPage = () => {
         })
         .catch((err) => {
             console.error("ERROR:", err);
-            setError("No se pudieron cargar los productos");
-        });
+            setError("No se pudieron cargar los productos. Intenta de nuevo más tarde.");
+        })
+        .finally(() => setLoading(false));
     }, []);
 
 
@@ -89,7 +90,9 @@ export const CategoryProductsPage = () => {
                     />
                 </div>
 
-                {error ? (
+                {loading ? (
+                    <Loader text="Cargando alojamientos..."/>
+                ) : error ? (
                     <p className='mt-6 text-red-600'>{error}</p>
                 ) : (
                     <>
@@ -98,7 +101,9 @@ export const CategoryProductsPage = () => {
                         <span className='font-bold'>{products.length}</span> alojamientos
                     </p>
 
-                    {filteredProducts.length === 0 && products.length > 0 ? (
+                    {products.length === 0 ? (
+                        <p className='mt-10 text-center text-slate-600'>No hay alojamientos para mostrar</p>
+                    ) : filteredProducts.length === 0 ? (
                         <div className='flex flex-col items-center gap-4 mt-10 text-center'>
                             <p className='text-slate-600'>No hay alojamientos para estos filtros</p>
                             <button

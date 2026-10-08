@@ -1,3 +1,5 @@
+import { readErrorMessage } from './apiError';
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 // Public: returns every feature { id, name, icon }.
@@ -9,7 +11,7 @@ export async function getFeatures() {
     return res.json();
 }
 
-// Admin only. 409: the backend explains that the name already exists.
+// Admin only. 409: the backend explains that the name already exists (JSON { message }).
 export async function createFeature(featureData, token) {
 
     const res = await fetch(`${BASE_URL}/features`, {
@@ -18,8 +20,7 @@ export async function createFeature(featureData, token) {
         body: JSON.stringify(featureData),
     });
 
-    if (res.status === 409) throw new Error(await res.text());
-    if (!res.ok) throw new Error('No se pudo crear la característica');
+    if (!res.ok) throw new Error(await readErrorMessage(res, 'No se pudo crear la característica'));
 
     return res.json();
 }
@@ -32,8 +33,7 @@ export async function updateFeature(id, featureData, token) {
         body: JSON.stringify(featureData),
     });
 
-    if (res.status === 409) throw new Error(await res.text());
-    if (!res.ok) throw new Error('No se pudo actualizar la característica');
+    if (!res.ok) throw new Error(await readErrorMessage(res, 'No se pudo actualizar la característica'));
 
     return res.json();
 }

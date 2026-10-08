@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Header } from '../organisms/Header'
 import { Footer } from '../organisms/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getProductById, getProducts } from '../../api/productService'
+import { getProductById } from '../../api/productService'
 import { RiArrowLeftCircleLine, RiMapPinLine } from 'react-icons/ri'
 import { GalleryModal } from '../organisms/GalleryModal'
 import { ProductFeatures } from '../molecules/ProductFeatures'
+import { Loader } from '../atoms/Loader'
 
 export const ProductDetailPage = () => {
 
@@ -30,12 +31,40 @@ export const ProductDetailPage = () => {
     
     }, [id]);
 
-    if (error) {
-        return <p>{error}</p>;
-    }
+    // Loading and error keep the page layout (header, back button, footer) instead of a bare text.
+    if (error || !product) {
+        return (
+            <div className="flex flex-col min-h-screen">
+                <Header />
 
-    if (!product) {
-        return <p>Cargando producto...</p>;
+                <div className="bg-slate-700 w-full h-14 flex items-center justify-end px-6">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="text-white text-5xl cursor-pointer hover:text-[#5D9C42]"
+                    >
+                        <RiArrowLeftCircleLine />
+                    </button>
+                </div>
+
+                <div className="flex-1 flex flex-col items-center justify-center gap-4 px-4 py-16 text-center">
+                    {error ? (
+                        <>
+                            <p className="text-red-600">{error}</p>
+                            <button
+                                onClick={() => navigate('/')}
+                                className="px-6 py-2 rounded-md bg-[#5D9C42] text-white cursor-pointer"
+                            >
+                                Volver al inicio
+                            </button>
+                        </>
+                    ) : (
+                        <Loader text="Cargando producto..." />
+                    )}
+                </div>
+
+                <Footer />
+            </div>
+        );
     }
 
 
@@ -140,17 +169,17 @@ export const ProductDetailPage = () => {
                 </div>
 
                 {/* Contenido principal */}
-                <div className="px-6 py-6">
+                <div className="px-6 pt-6 pb-26">
 
                     <h1 className="text-3xl font-bold text-slate-800">
                         {product.name}
                     </h1>
 
                     {/* Descripción */}
-                    <h2 className="text-xl font-bold text-slate-800 mt-6 border-b pb-2">
+                    <h2 className="text-xl font-bold text-slate-800 mt-6 border-b pb-2 ">
                         Conoce un poco más
                     </h2>
-                    <p className="mt-2 text-slate-600 leading-relaxed">
+                    <p className="mt-8 mb-20 text-slate-600 leading-relaxed whitespace-pre-line text-justify ">
                         {product.description}
                     </p>
 

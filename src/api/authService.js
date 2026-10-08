@@ -1,3 +1,5 @@
+import { readErrorMessage } from './apiError';
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function registerUser(userData) {
@@ -14,7 +16,7 @@ export async function registerUser(userData) {
 
     // 409: the backend sends a user-friendly message (e.g. email already registered)
     if (res.status === 409) {
-        throw new Error(await res.text());
+        throw new Error(await readErrorMessage(res, 'Este correo ya tiene una cuenta existente'));
     }
 
     if (!res.ok) {

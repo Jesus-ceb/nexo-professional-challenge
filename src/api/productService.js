@@ -1,3 +1,5 @@
+import { readErrorMessage } from './apiError';
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function getCategories() {
@@ -34,10 +36,8 @@ export async function createProduct(productData, token) {
         body: JSON.stringify(productData),
     });
 
-    if (!res.ok) {
-        const errorMessage = await res.text() //We read the actual message from the backend.
-        throw new Error(errorMessage || 'Error al crear el producto')
-    }
+    // 409 duplicated name, 400 invalid fields: we show the actual message from the backend.
+    if (!res.ok) throw new Error(await readErrorMessage(res, 'Error al crear el producto'));
 
     return res.json();
 }
@@ -59,7 +59,7 @@ export async function uploadProductImage(productId, file, token){
 
 }
 
-// Replaces name, description, category, city, address and features (images are handled separately).
+// Body: { name, description, categoryId, cityId, address, featureIds } (ProductRequest); images are handled separately.
 export async function updateProduct(id, productData, token) {
 
     const res = await fetch(`${BASE_URL}/products/${id}`, {
@@ -68,7 +68,7 @@ export async function updateProduct(id, productData, token) {
         body: JSON.stringify(productData),
     });
 
-    if (!res.ok) throw new Error('Error al actualizar el producto');
+    if (!res.ok) throw new Error(await readErrorMessage(res, 'Error al actualizar el producto'));
 
     return res.json();
 }

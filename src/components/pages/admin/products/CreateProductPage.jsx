@@ -113,11 +113,10 @@ export const CreateProductPage = () => {
         const productData = {
             name: productName,
             description: description,
-            category: { id: Number(categoryId)},
-            city: { id: Number(cityId)},
-            address: { direction:direction},
-            features: featureIds.map((id) => ({ id })),
-            images: []
+            categoryId: Number(categoryId),
+            cityId: Number(cityId),
+            address: direction,
+            featureIds
         }
 
         const createdProduct = await createProduct(productData, token)

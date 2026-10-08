@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button } from "../../../atoms/Button"
+import { Loader } from "../../../atoms/Loader"
 import { FeatureForm } from "../../../molecules/FeatureForm"
 
 import { createFeature, deleteFeature, getFeatures, updateFeature } from "../../../../api/featureService"
@@ -12,6 +13,7 @@ export const FeaturesPage = () => {
 
     const [features, setFeatures] = useState([])
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     // Form state: hidden, new feature (editing null) or editing an existing one
     const [showForm, setShowForm] = useState(false)
@@ -19,7 +21,10 @@ export const FeaturesPage = () => {
 
     // When assembling the component, it requests the registered features from the backend.
     useEffect(() => {
-        getFeatures().then(setFeatures).catch(() => setError('Error al cargar las características'));
+        getFeatures()
+        .then(setFeatures)
+        .catch(() => setError('Error al cargar las características'))
+        .finally(() => setLoading(false));
     }, []);
 
 
@@ -96,7 +101,9 @@ export const FeaturesPage = () => {
 
                 {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
-                {!error && features.length === 0 && (
+                {loading && <Loader text="Cargando características..."/>}
+
+                {!loading && !error && features.length === 0 && (
                     <p className="text-slate-500 text-sm">No hay características registradas</p>
                 )}
 

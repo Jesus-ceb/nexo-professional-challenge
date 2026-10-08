@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 // Admin routes
 import { AdminPanel } from "../components/pages/AdminPanel"
 import { ProductsPage } from "../components/pages/admin/products/ProductsPage"
@@ -13,6 +13,7 @@ import { FeaturesPage } from "../components/pages/admin/features/FeaturesPage"
 import { HomePage } from "../components/pages/HomePage"
 import { ProductDetailPage } from "../components/pages/ProductDetailPage"
 import { CategoryProductsPage } from "../components/pages/CategoryProductsPage"
+import { NotFoundPage } from "../components/pages/NotFoundPage"
 // urls auth
 import { RegisterPage } from "../components/pages/auth/RegisterPage"
 import { LoginPage } from "../components/pages/auth/LoginPage"
@@ -32,6 +33,8 @@ export const AppRouter = () => {
 
                 {/* La URL "/admin" y sus rutas hijas (solo para usuarios con rol ADMIN) */}
                 <Route path="/admin" element={<AdminRoute><AdminPanel/></AdminRoute>}>
+                    {/* "/admin" alone opens the dashboard instead of an empty panel */}
+                    <Route index element={<Navigate to="dashboard" replace />} />
                     <Route path="dashboard" element={<DashboardPage />} />
                     <Route path="products" element={<ProductsPage />} />
                     <Route path="products/new" element={<CreateProductPage />} />
@@ -54,6 +57,9 @@ export const AppRouter = () => {
 
                 {/* Solo para usuarios con sesión iniciada */}
                 <Route path="/mi-perfil" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+
+                {/* Any other URL */}
+                <Route path="*" element={<NotFoundPage/>} />
 
                 
             </Routes>
