@@ -12,6 +12,7 @@ import { FeaturesPage } from "../components/pages/admin/features/FeaturesPage"
 // main routes  
 import { HomePage } from "../components/pages/HomePage"
 import { ProductDetailPage } from "../components/pages/ProductDetailPage"
+import { CategoryProductsPage } from "../components/pages/CategoryProductsPage"
 // urls auth
 import { RegisterPage } from "../components/pages/auth/RegisterPage"
 import { LoginPage } from "../components/pages/auth/LoginPage"
@@ -44,6 +45,7 @@ export const AppRouter = () => {
                 {/* La URL principal "/" cargará todo tu diseño actual de Nexo */}
                 <Route path="/" element={<HomePage />}  />
                 <Route path="/products/:id" element={<ProductDetailPage/>}  />
+                <Route path="/productos" element={<CategoryProductsPage/>}  />
 
                 {/* URLs de auth */}
                 <Route path="/register" element={<RegisterPage/>} />
