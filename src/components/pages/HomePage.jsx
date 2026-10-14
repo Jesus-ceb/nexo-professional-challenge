@@ -3,18 +3,48 @@ import { SearchSection } from "../organisms/SearchSection"
 import { SmallCards } from "../molecules/SmallCards"
 import { ProductGrid } from "../organisms/ProductGrid"
 import { Footer } from "../organisms/Footer"
+import { SearchResults } from "../organisms/SearchResults"
 import { Loader } from "../atoms/Loader"
 import { useEffect, useMemo, useState } from "react"
-import { getCategories, getProducts } from "../../api/productService"
+import { getCategories, getProducts, searchProducts } from "../../api/productService"
 import { countByCategory, getRandomCategoryImage, pluralizeCategory } from "../../utils/categoryUtils"
+import { fromISODate } from "../../utils/dateUtils"
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 
 
 export const HomePage = () => {
 
     const navigate = useNavigate()
+
+    // search status: the search comes from the URL (/?q=...&checkIn=...&checkOut=...)
+    const [searchParams] = useSearchParams()
+    const searchQuery = searchParams.get('q') ?? ''
+    const searchCheckIn = searchParams.get('checkIn') ?? ''
+    const searchCheckOut = searchParams.get('checkOut') ?? ''
+    const isSearching = Boolean(searchQuery || searchCheckIn || searchCheckOut)
+    const searchKey = searchParams.toString()
+
+    // results are stored with the search they belong to, so loading = "the stored search is not the current one"
+    const [search, setSearch] = useState({ key: null, results: [], error: null })
+    const searchLoading = search.key !== searchKey
+
+    useEffect(() => {
+        if (!isSearching) return
+
+        let ignore = false
+        searchProducts({ q: searchQuery, checkIn: searchCheckIn, checkOut: searchCheckOut })
+        .then((results) => {
+            if (!ignore) setSearch({ key: searchKey, results, error: null })
+        })
+        .catch((err) => {
+            if (!ignore) setSearch({ key: searchKey, results: [], error: err.message })
+        })
+
+        // a newer search started: ignore the answer of this one
+        return () => { ignore = true }
+    }, [isSearching, searchKey, searchQuery, searchCheckIn, searchCheckOut])
 
 
 
@@ -68,17 +98,31 @@ export const HomePage = () => {
 
     return (
         <>
-        <div>
+        {/* min-h-screen + flex-col + flex-1 on main: keeps the Footer at the bottom even with no products */}
+        <div className='flex flex-col min-h-screen'>
 
             {/* Header with log + buttons */}
             <Header/>
 
-            {/* Search Section */}
-            <SearchSection/>
+            {/* Search Section: remounted when the URL search changes so the fields follow it (e.g. "Limpiar búsqueda") */}
+            <SearchSection key={`search-${searchKey}`}/>
+
+            {/* Search results: above the categories and recommendations, which stay as they are */}
+            {isSearching && (
+                <SearchResults
+                key={`results-${searchKey}`}
+                query={searchQuery}
+                checkIn={fromISODate(searchCheckIn)}
+                checkOut={fromISODate(searchCheckOut)}
+                results={search.results}
+                loading={searchLoading}
+                error={search.error}
+                />
+            )}
 
 
             {/* Main */}
-            <div>
+            <div className='flex-1 flex flex-col'>
             {/* Cards section: Small Cards */}
             <div className='flex flex-col w-full h-auto py-4'>
 
@@ -107,7 +151,7 @@ export const HomePage = () => {
             </div>
 
             {/* Large Cards section 2 */}
-            <div className='bg-[#F0F7ED] pt-8 pb-10 px-4 md:px-10'>
+            <div className='flex-1 bg-[#F0F7ED] pt-8 pb-10 px-4 md:px-10'>
 
                 <h2 className='text-2xl md:text-3xl font-bold text-[#5D9C42]   w-fit '>
                 Recomendaciones
