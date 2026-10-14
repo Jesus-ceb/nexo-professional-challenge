@@ -1,13 +1,14 @@
+import { FavoriteButton } from "../atoms/FavoriteButton"
 
-
-export const LargeCard = ({category, name, imageURL, location, features = []}) => {
+// The heart only shows when the parent passes onToggleFavorite.
+export const LargeCard = ({category, name, imageURL, location, features = [], isFavorite = false, onToggleFavorite}) => {
     return (
         <>
         <div className="w-full h-full flex flex-col lg:flex-row bg-white rounded-md overflow-hidden">
 
             {/* image */}
             {/* fixed height: the photo's own proportions must not stretch the card */}
-            <div className="w-full lg:w-2/5 h-52 lg:h-56 shrink-0">
+            <div className="relative w-full lg:w-2/5 h-52 lg:h-56 shrink-0">
 
                 {/* si el usuario no sube imagen, muestra la siguiente por defecto */}
                 <img
@@ -15,6 +16,15 @@ export const LargeCard = ({category, name, imageURL, location, features = []}) =
                 alt={name}
                 className="w-full h-full object-cover"
                 />
+
+                {/* favorite: top-right corner of the photo */}
+                {onToggleFavorite && (
+                    <FavoriteButton
+                    isFavorite={isFavorite}
+                    onToggle={onToggleFavorite}
+                    className="absolute top-2 right-2"
+                    />
+                )}
             </div>
 
             {/* RIGHT CONTENT */}

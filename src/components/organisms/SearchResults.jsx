@@ -18,7 +18,7 @@ export const SearchResults = ({ query, checkIn, checkOut, results, loading, erro
     const count = results.length
 
     return (
-        <section ref={sectionRef} id="resultados" aria-live="polite" className='scroll-mt-4 bg-white border-b border-gray-200 pt-8 pb-6 px-4 md:px-10'>
+        <section ref={sectionRef} id="resultados" aria-live="polite" className='scroll-mt-4 bg-white border-b border-gray-200 pt-8 pb-6 px-10 md:px-24 lg:px-40 xl:px-52'>
 
             <div className='flex flex-col md:flex-row md:items-end md:justify-between gap-3'>
                 <div>

@@ -3,11 +3,14 @@ import { Header } from '../organisms/Header'
 import { Footer } from '../organisms/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getProductById } from '../../api/productService'
-import { RiArrowLeftCircleLine, RiMapPinLine } from 'react-icons/ri'
+import { RiArrowLeftCircleLine, RiMapPinLine, RiShareLine } from 'react-icons/ri'
 import { GalleryModal } from '../organisms/GalleryModal'
 import { ProductFeatures } from '../molecules/ProductFeatures'
 import { AvailabilityCalendar } from '../organisms/AvailabilityCalendar'
 import { Loader } from '../atoms/Loader'
+import { FavoriteButton } from '../atoms/FavoriteButton'
+import { Toast } from '../atoms/Toast'
+import { useFavorites } from '../../hooks/useFavorites'
 
 export const ProductDetailPage = () => {
 
@@ -19,6 +22,27 @@ export const ProductDetailPage = () => {
 
     // controla si el modal de galería está visible
     const [showGallery, setShowGallery] = useState(false)
+
+    const { isFavorite, toggleFavorite, error: favoriteError } = useFavorites()
+    const [shareMessage, setShareMessage] = useState(null)
+
+    // Native share sheet on phones; on desktop the link is copied to the clipboard.
+    const handleShare = async () => {
+        const url = window.location.href
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: product.name, url })
+                return
+            }
+            await navigator.clipboard.writeText(url)
+            setShareMessage('Enlace copiado')
+        } catch (err) {
+            // the user closed the share sheet: nothing to report
+            if (err.name === 'AbortError') return
+            setShareMessage('No se pudo compartir el enlace')
+        }
+        setTimeout(() => setShareMessage(null), 2500)
+    }
 
     useEffect(() => {
 
@@ -111,6 +135,25 @@ export const ProductDetailPage = () => {
                 {/* Image: grilla de imágenes del producto */}
                     
                     <div className="px-6 md:px-20 lg:px-40 xl:px-64 mt-4">
+
+                    {/* share + favorite, above the images on the left */}
+                    <div className="flex items-center gap-1 mb-3 -ml-2">
+                        <button
+                        type="button"
+                        onClick={handleShare}
+                        aria-label="Compartir"
+                        title="Compartir"
+                        className="size-10 flex items-center justify-center text-2xl text-slate-700 rounded-full cursor-pointer transition-transform duration-200 hover:scale-110 hover:text-[#5D9C42]"
+                        >
+                            <RiShareLine />
+                        </button>
+                        <FavoriteButton
+                        variant="plain"
+                        isFavorite={isFavorite(product.id)}
+                        onToggle={() => toggleFavorite(product.id)}
+                        />
+                    </div>
+
                     {product.images?.length > 0 ? (
                         <div className="grid grid-cols-2 gap-2 h-96 overflow-hidden ">
 
@@ -203,6 +246,9 @@ export const ProductDetailPage = () => {
                 onClose={() => setShowGallery(false)}
                 />
             )}
+
+            <Toast message={favoriteError}/>
+            <Toast message={shareMessage} type="info"/>
 
         {/* footer */}
         <Footer />

@@ -74,7 +74,7 @@ export const CategoryProductsPage = () => {
             {/* Search Section */}
             <SearchSection/>
 
-            <div className='flex-1 bg-[#F0F7ED] pt-8 pb-10 px-4 md:px-10'>
+            <div className='flex-1 bg-[#F0F7ED] pt-8 pb-10 px-10 md:px-24 lg:px-40 xl:px-52'>
 
                 <h2 className='text-2xl md:text-3xl font-bold text-[#5D9C42] w-fit'>
                 {title || "Alojamientos"}

@@ -127,7 +127,7 @@ export const HomePage = () => {
             <div className='flex flex-col w-full h-auto py-4'>
 
                 <span
-                className='text-2xl md:text-3xl font-bold text-[#5D9C42]  ml-10 mx-auto w-fit'
+                className='text-2xl md:text-3xl font-bold text-[#5D9C42] mx-10 md:mx-24 lg:mx-40 xl:mx-52 mb-5 w-fit'
                 >
                 Buscar por tipo de alojamiento
                 </span>
@@ -135,7 +135,7 @@ export const HomePage = () => {
                 {/* div de smallcards */}
                 {loading && <Loader text="Cargando categorías..."/>}
 
-                <div className='grid grid-cols-1 m-1 mx-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6'>
+                <div className='grid grid-cols-1 m-1 mx-10 md:mx-24 lg:mx-40 xl:mx-52 mb-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6'>
                 {categoryCards.map((card) => (
                     <SmallCards
                     key={card.id}
@@ -151,7 +151,7 @@ export const HomePage = () => {
             </div>
 
             {/* Large Cards section 2 */}
-            <div className='flex-1 bg-[#F0F7ED] pt-8 pb-10 px-4 md:px-10'>
+            <div className='flex-1 bg-[#F0F7ED] pt-8 pb-10 px-10 md:px-24 lg:px-40 xl:px-52'>
 
                 <h2 className='text-2xl md:text-3xl font-bold text-[#5D9C42]   w-fit '>
                 Recomendaciones
