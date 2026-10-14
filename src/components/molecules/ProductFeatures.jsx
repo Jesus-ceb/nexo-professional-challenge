@@ -3,7 +3,7 @@ export const ProductFeatures = ({ features = [] }) => {
 
     return (
         <section>
-            <h2 className="text-xl font-bold text-slate-800 mt-6 border-b pb-2">
+            <h2 className="text-xl font-bold text-slate-800 mt-6 border-b pb-2 ">
                 ¿Qué ofrece este lugar?
             </h2>
 

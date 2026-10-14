@@ -6,6 +6,7 @@ import { getProductById } from '../../api/productService'
 import { RiArrowLeftCircleLine, RiMapPinLine } from 'react-icons/ri'
 import { GalleryModal } from '../organisms/GalleryModal'
 import { ProductFeatures } from '../molecules/ProductFeatures'
+import { AvailabilityCalendar } from '../organisms/AvailabilityCalendar'
 import { Loader } from '../atoms/Loader'
 
 export const ProductDetailPage = () => {
@@ -109,7 +110,7 @@ export const ProductDetailPage = () => {
 
                 {/* Image: grilla de imágenes del producto */}
                     
-                    <div className="px-6 mt-4">
+                    <div className="px-6 md:px-20 lg:px-40 xl:px-64 mt-4">
                     {product.images?.length > 0 ? (
                         <div className="grid grid-cols-2 gap-2 h-96 overflow-hidden ">
 
@@ -169,7 +170,7 @@ export const ProductDetailPage = () => {
                 </div>
 
                 {/* Contenido principal */}
-                <div className="px-6 pt-6 pb-26">
+                <div className="px-6 md:px-20 lg:px-40 xl:px-64 pt-6 pb-26">
 
                     <h1 className="text-3xl font-bold text-slate-800">
                         {product.name}
@@ -185,6 +186,12 @@ export const ProductDetailPage = () => {
 
                     {/* Características */}
                     <ProductFeatures features={product.features} />
+
+                    {/* Disponibilidad */}
+                    <h2 className="text-xl font-bold text-slate-800 mt-22 border-b pb-4">
+                        Disponibilidad
+                    </h2>
+                    <AvailabilityCalendar />
                 </div>
             </div>
 

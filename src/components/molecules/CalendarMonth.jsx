@@ -1,7 +1,8 @@
 import { WEEKDAYS, formatMonthYear, getMonthMatrix, isBefore, isSameDay, startOfDay } from "../../utils/dateUtils"
 
 // One month of the range calendar: past days disabled, today highlighted, selected range shaded.
-export const CalendarMonth = ({ monthDate, checkIn, checkOut, hoverDate, onSelect, onHover }) => {
+// isBooked marks occupied days (product availability); onSelect/onHover are optional for a read-only calendar.
+export const CalendarMonth = ({ monthDate, checkIn, checkOut, hoverDate, onSelect, onHover, isBooked = () => false }) => {
 
     const today = startOfDay(new Date())
     const weeks = getMonthMatrix(monthDate.getFullYear(), monthDate.getMonth())
@@ -13,6 +14,7 @@ export const CalendarMonth = ({ monthDate, checkIn, checkOut, hoverDate, onSelec
 
     const dayClass = (day) => {
         if (isBefore(day, today)) return 'text-gray-300 cursor-not-allowed'
+        if (isBooked(day)) return 'bg-red-50 text-red-400 line-through rounded-full cursor-not-allowed'
         if (isSameDay(day, checkIn) || isSameDay(day, checkOut)) return 'bg-[#5D9C42] text-white font-bold rounded-full'
         if (isInRange(day)) return 'bg-[#F0F7ED] text-gray-800 rounded-full'
         if (isSameDay(day, today)) return 'text-blue-600 font-bold hover:bg-gray-100 rounded-full'
@@ -35,10 +37,11 @@ export const CalendarMonth = ({ monthDate, checkIn, checkOut, hoverDate, onSelec
                     <button
                     key={index}
                     type="button"
-                    disabled={isBefore(day, today)}
-                    onClick={() => onSelect(day)}
-                    onMouseEnter={() => onHover(day)}
-                    className={`h-9 w-9 mx-auto flex items-center justify-center transition-colors cursor-pointer ${dayClass(day)}`}
+                    disabled={isBefore(day, today) || isBooked(day)}
+                    title={!isBefore(day, today) && isBooked(day) ? 'Ocupado' : undefined}
+                    onClick={() => onSelect?.(day)}
+                    onMouseEnter={() => onHover?.(day)}
+                    className={`h-9 w-9 mx-auto flex items-center justify-center transition-colors ${onSelect ? 'cursor-pointer' : 'cursor-default'} ${dayClass(day)}`}
                     >
                         {day.getDate()}
                     </button>
