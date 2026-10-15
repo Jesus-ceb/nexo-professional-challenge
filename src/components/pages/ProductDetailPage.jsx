@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Header } from '../organisms/Header'
 import { Footer } from '../organisms/Footer'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getProductById } from '../../api/productService'
 import { RiArrowLeftCircleLine, RiMapPinLine, RiShareLine } from 'react-icons/ri'
 import { GalleryModal } from '../organisms/GalleryModal'
+import { ShareModal } from '../organisms/ShareModal'
 import { ProductFeatures } from '../molecules/ProductFeatures'
 import { ProductPolicies } from '../molecules/ProductPolicies'
 import { AvailabilityCalendar } from '../organisms/AvailabilityCalendar'
@@ -25,25 +26,18 @@ export const ProductDetailPage = () => {
     const [showGallery, setShowGallery] = useState(false)
 
     const { isFavorite, toggleFavorite } = useFavorites()
+    // share window (social networks) + short notices it sends, e.g. "Enlace copiado"
+    const [showShare, setShowShare] = useState(false)
     const [shareMessage, setShareMessage] = useState(null)
+    const shareTimer = useRef(null)
 
-    // Native share sheet on phones; on desktop the link is copied to the clipboard.
-    const handleShare = async () => {
-        const url = window.location.href
-        try {
-            if (navigator.share) {
-                await navigator.share({ title: product.name, url })
-                return
-            }
-            await navigator.clipboard.writeText(url)
-            setShareMessage('Enlace copiado')
-        } catch (err) {
-            // the user closed the share sheet: nothing to report
-            if (err.name === 'AbortError') return
-            setShareMessage('No se pudo compartir el enlace')
-        }
-        setTimeout(() => setShareMessage(null), 2500)
+    const notifyShare = (text) => {
+        setShareMessage(text)
+        clearTimeout(shareTimer.current)
+        shareTimer.current = setTimeout(() => setShareMessage(null), 3000)
     }
+
+    useEffect(() => () => clearTimeout(shareTimer.current), [])
 
     useEffect(() => {
 
@@ -141,7 +135,7 @@ export const ProductDetailPage = () => {
                     <div className="flex items-center gap-1 mb-3 -ml-2">
                         <button
                         type="button"
-                        onClick={handleShare}
+                        onClick={() => setShowShare(true)}
                         aria-label="Compartir"
                         title="Compartir"
                         className="size-10 flex items-center justify-center text-2xl text-slate-700 rounded-full cursor-pointer transition-transform duration-200 hover:scale-110 hover:text-[#5D9C42]"
@@ -248,6 +242,16 @@ export const ProductDetailPage = () => {
                 images={product.images}
                 productName={product.name}
                 onClose={() => setShowGallery(false)}
+                />
+            )}
+
+            {/* share window: preview, custom message and social network */}
+            {showShare && (
+                <ShareModal
+                product={product}
+                url={window.location.href}
+                onClose={() => setShowShare(false)}
+                onNotify={notifyShare}
                 />
             )}
 
