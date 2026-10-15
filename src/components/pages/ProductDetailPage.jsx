@@ -6,6 +6,7 @@ import { getProductById } from '../../api/productService'
 import { RiArrowLeftCircleLine, RiMapPinLine, RiShareLine } from 'react-icons/ri'
 import { GalleryModal } from '../organisms/GalleryModal'
 import { ProductFeatures } from '../molecules/ProductFeatures'
+import { ProductPolicies } from '../molecules/ProductPolicies'
 import { AvailabilityCalendar } from '../organisms/AvailabilityCalendar'
 import { Loader } from '../atoms/Loader'
 import { FavoriteButton } from '../atoms/FavoriteButton'
@@ -235,6 +236,9 @@ export const ProductDetailPage = () => {
                         Disponibilidad
                     </h2>
                     <AvailabilityCalendar />
+
+                    {/* Políticas */}
+                    <ProductPolicies />
                 </div>
             </div>
 
