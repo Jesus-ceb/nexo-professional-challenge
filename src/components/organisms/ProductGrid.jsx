@@ -1,8 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { LargeCard } from "../molecules/LargeCard"
-import { Toast } from "../atoms/Toast"
-import { useFavorites } from "../../hooks/useFavorites"
+import { useFavorites } from "../../context/FavoritesContext"
 
 // total pagination 10 products
 const PRODUCTS_PER_PAGE = 10;
@@ -11,13 +10,16 @@ const PRODUCTS_PER_PAGE = 10;
 export const ProductGrid = ({ products }) => {
 
     const navigate = useNavigate()
-    const [currentPage, setCurrentPage] = useState(1)
-    const { isFavorite, toggleFavorite, error: favoriteError } = useFavorites()
+    const [page, setCurrentPage] = useState(1)
+    const { isFavorite, toggleFavorite } = useFavorites()
 
     // pagination
     const totalPages = Math.ceil(
         products.length / PRODUCTS_PER_PAGE
     )
+
+    // the list can shrink (e.g. removing favorites): never stay on a page that no longer exists
+    const currentPage = Math.min(page, Math.max(totalPages, 1))
 
     const startIndex =
         (currentPage - 1) * PRODUCTS_PER_PAGE;
@@ -54,7 +56,6 @@ export const ProductGrid = ({ products }) => {
             ))}
         </div>
 
-        <Toast message={favoriteError}/>
 
         {/* Renders the inter-page navigation controls ("Previous" and "Next") along with the current page indicator. */}
 
@@ -63,7 +64,7 @@ export const ProductGrid = ({ products }) => {
 
                 <button
                     onClick={() =>
-                        setCurrentPage((page) => page - 1)
+                        setCurrentPage(currentPage - 1)
                     }
                     disabled={currentPage === 1}
                     className="px-4 py-2 rounded-md bg-[#5D9C42] text-white disabled:opacity-40"
@@ -77,7 +78,7 @@ export const ProductGrid = ({ products }) => {
 
                 <button
                     onClick={() =>
-                        setCurrentPage((page) => page + 1)
+                        setCurrentPage(currentPage + 1)
                     }
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 rounded-md bg-[#5D9C42] text-white disabled:opacity-40"

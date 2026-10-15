@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { Button } from "../atoms/Button"
 import { useAuth } from "../../context/AuthContext"
+import { FavoritesIcon } from "../atoms/FavoritesIcon"
 import { getInitials } from "../../utils/getInitials"
 
 export const Header = () => {
@@ -38,6 +39,17 @@ export const Header = () => {
             <div className="flex px-1 text-xs sm:px-1 sm:py-0.5 md:px-3 md:py-1 md:text-sm  lg:px-5 lg:py-2 items-center gap-3 w-fit justify-end">
                 {isAuthenticated ? (
                     <>
+                    {/* "Mis viajes": favorites list, left of the avatar */}
+                    <button
+                    onClick={() => navigate('/mis-viajes')}
+                    aria-label="Mis viajes"
+                    title="Mis viajes"
+                    className="flex items-center gap-2 min-h-10 px-2 rounded-md text-[#5D9C42] font-semibold cursor-pointer hover:bg-[#F0F7ED] transition-colors"
+                    >
+                        <FavoritesIcon className="text-2xl md:text-3xl"/>
+                        <span className="hidden md:inline">Mis viajes</span>
+                    </button>
+
                     {/* Avatar with initials + name, both open the profile; "Cerrar sesión" sits under the name */}
                     <div className="flex items-center gap-2">
                         <button

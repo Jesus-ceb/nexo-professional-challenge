@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useAuth } from "../context/AuthContext"
-import { addFavorite, getFavoriteIds, removeFavorite } from "../api/favoriteService"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { FavoritesContext } from './FavoritesContext'
+import { useAuth } from './AuthContext'
+import { addFavorite, getFavoriteIds, removeFavorite } from '../api/favoriteService'
+import { Toast } from '../components/atoms/Toast'
 
 const NO_FAVORITES = new Set()
 const ERROR_MS = 3000
 
-// Favorites of the logged-in user, shared by the Home cards and the product detail.
+// Favorites of the logged-in user, loaded once per session.
 // The heart changes at once and goes back if the backend fails; a guest is sent to /login.
-export const useFavorites = () => {
+export const FavoritesProvider = ({ children }) => {
 
     const { token, isAuthenticated } = useAuth()
     const navigate = useNavigate()
@@ -44,7 +46,7 @@ export const useFavorites = () => {
         })
     }
 
-    const toggleFavorite = (productId) => {
+    const toggleFavorite = useCallback((productId) => {
         if (!isAuthenticated) {
             navigate('/login')
             return
@@ -60,7 +62,21 @@ export const useFavorites = () => {
             clearTimeout(errorTimer.current)
             errorTimer.current = setTimeout(() => setError(null), ERROR_MS)
         })
-    }
+    }, [isAuthenticated, favoriteIds, token, navigate])
 
-    return { isFavorite: (productId) => visibleIds.has(productId), toggleFavorite, error }
+    const value = useMemo(
+        () => ({
+            favoriteIds: visibleIds,
+            isFavorite: (productId) => visibleIds.has(productId),
+            toggleFavorite,
+        }),
+        [visibleIds, toggleFavorite]
+    )
+
+    return (
+        <FavoritesContext.Provider value={value}>
+            {children}
+            <Toast message={error}/>
+        </FavoritesContext.Provider>
+    )
 }

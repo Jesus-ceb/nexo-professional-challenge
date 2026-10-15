@@ -10,7 +10,7 @@ import { AvailabilityCalendar } from '../organisms/AvailabilityCalendar'
 import { Loader } from '../atoms/Loader'
 import { FavoriteButton } from '../atoms/FavoriteButton'
 import { Toast } from '../atoms/Toast'
-import { useFavorites } from '../../hooks/useFavorites'
+import { useFavorites } from '../../context/FavoritesContext'
 
 export const ProductDetailPage = () => {
 
@@ -23,7 +23,7 @@ export const ProductDetailPage = () => {
     // controla si el modal de galería está visible
     const [showGallery, setShowGallery] = useState(false)
 
-    const { isFavorite, toggleFavorite, error: favoriteError } = useFavorites()
+    const { isFavorite, toggleFavorite } = useFavorites()
     const [shareMessage, setShareMessage] = useState(null)
 
     // Native share sheet on phones; on desktop the link is copied to the clipboard.
@@ -247,7 +247,6 @@ export const ProductDetailPage = () => {
                 />
             )}
 
-            <Toast message={favoriteError}/>
             <Toast message={shareMessage} type="info"/>
 
         {/* footer */}

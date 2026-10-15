@@ -21,6 +21,7 @@ import { RegistrationSuccessPage } from "../components/pages/auth/RegistrationSu
 // logged-in user routes
 import { ProtectedRoute } from "./ProtectedRoute"
 import { ProfilePage } from "../components/pages/ProfilePage"
+import { FavoritesPage } from "../components/pages/FavoritesPage"
 // admin-only routes
 import { AdminRoute } from "./AdminRoute"
 
@@ -57,6 +58,7 @@ export const AppRouter = () => {
 
                 {/* Solo para usuarios con sesión iniciada */}
                 <Route path="/mi-perfil" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>} />
+                <Route path="/mis-viajes" element={<ProtectedRoute><FavoritesPage/></ProtectedRoute>} />
 
                 {/* Any other URL */}
                 <Route path="*" element={<NotFoundPage/>} />
