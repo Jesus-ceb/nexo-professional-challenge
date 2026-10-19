@@ -20,6 +20,8 @@ import { LoginPage } from "../components/pages/auth/LoginPage"
 import { RegistrationSuccessPage } from "../components/pages/auth/RegistrationSuccessPage"
 // logged-in user routes
 import { ProtectedRoute } from "./ProtectedRoute"
+// guest-only routes (login, register)
+import { GuestRoute } from "./GuestRoute"
 import { ProfilePage } from "../components/pages/ProfilePage"
 import { FavoritesPage } from "../components/pages/FavoritesPage"
 // admin-only routes
@@ -52,8 +54,8 @@ export const AppRouter = () => {
                 <Route path="/productos" element={<CategoryProductsPage/>}  />
 
                 {/* URLs de auth */}
-                <Route path="/register" element={<RegisterPage/>} />
-                <Route path="/login" element={<LoginPage/>} />
+                <Route path="/register" element={<GuestRoute><RegisterPage/></GuestRoute>} />
+                <Route path="/login" element={<GuestRoute><LoginPage/></GuestRoute>} />
                 <Route path="/registro-exitoso" element={<ProtectedRoute><RegistrationSuccessPage/></ProtectedRoute>} />
 
                 {/* Solo para usuarios con sesión iniciada */}

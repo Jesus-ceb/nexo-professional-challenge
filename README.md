@@ -431,6 +431,156 @@ Modelo de usuario:
 - ⏳ Reservas de alojamientos
 - ⏳ Dashboard, inventario y configuración del panel admin
 
+# 🚀 Sprint 3 - Nuevas Funcionalidades (Frontend)
+
+## 📋 Resumen del Sprint
+
+| Funcionalidad | Qué se implementó | Archivos principales |
+|---|---|---|
+| Realizar búsqueda | Buscador con autocompletado, calendario doble de fechas y resultados en el Home | `SearchSection`, `SearchAutocomplete`, `DateRangeCalendar`, `CalendarMonth`, `SearchResults`, `dateUtils` |
+| Visualizar disponibilidad | Calendario doble en el detalle con fechas disponibles y ocupadas | `AvailabilityCalendar`, `CalendarMonth` |
+| Marcar como favorito | Corazón en cada tarjeta y en el detalle para marcar o desmarcar | `FavoriteButton`, `FavoritesProvider`, `favoriteService` |
+| Listar productos favoritos | Sección "Mis viajes" con los favoritos, accesible desde el Header | `FavoritesPage`, `FavoritesIcon`, `FavoritesContext` |
+| Ver bloque de políticas del producto | Bloque "Políticas del alojamiento" en columnas | `ProductPolicies`, `productPolicies` |
+| Compartir productos | Ventana para compartir con vista previa, mensaje y redes sociales | `ShareModal`, `shareNetworks` |
+| Puntuar producto | Calificación con estrellas, nota sobre 10 y comentarios | `StarRating`, `RatingSummaryCard`, `ReviewsModal`, `reviewService`, `ratingUtils` |
+
+## ✨ Funcionalidades Agregadas
+
+### Realizar búsqueda
+- ✅ **Bloque de búsqueda claro**: Título, texto de ayuda, etiquetas en los campos y botón "Realizar búsqueda"
+- ✅ **Autocompletado**: Al escribir 2 letras aparecen sugerencias de ciudades, tipos de alojamiento y nombres, con la parte que coincide resaltada; se recorren con ↑/↓, Enter elige y Esc cierra
+- ✅ **Calendario doble**: Al hacer clic en "Llegada - Salida" se abren dos meses (uno en móvil); los días pasados no se pueden elegir y el rango elegido se marca en verde
+- ✅ **Resultados en el Home**: Aparecen bajo el buscador ("Resultados para «…»" y el número de alojamientos encontrados), sin quitar las secciones de categorías y recomendaciones, con botón "Limpiar búsqueda"
+- ✅ **Búsqueda en la URL**: `/?q=cali&checkIn=2026-10-20&checkOut=2026-10-25` se puede compartir, funciona con "atrás" y se mantiene al recargar
+
+### Visualizar disponibilidad
+- ✅ **Calendario en el detalle**: Sección "Disponibilidad" con dos meses, flechas para avanzar y una leyenda (Disponible, Ocupado, Hoy)
+- ✅ **Fechas ocupadas**: Se ven en rojo y tachadas; por ahora son fechas de ejemplo (del 10 al 13 de cada mes) hasta que existan las reservas
+
+### Marcar como favorito
+- ✅ **Corazón en cada tarjeta**: Blanco con contorno verde sobre la foto; al marcarlo se pone rojo, con un solo clic y sin abrir el detalle
+- ✅ **Corazón en el detalle**: Junto al botón de compartir, encima de las imágenes
+- ✅ **Respuesta inmediata**: El corazón cambia al instante y vuelve a su estado si el servidor falla, mostrando un aviso
+- ✅ **Invitados**: Si no hay sesión, el corazón lleva al login
+
+### Listar productos favoritos
+- ✅ **Acceso desde el Header**: Ícono de maleta con corazón y el texto "Mis viajes", a la izquierda del avatar (solo el ícono en móvil)
+- ✅ **Página "Mis viajes"**: Lista de los alojamientos marcados, con botón para volver
+- ✅ **Tiempo real**: Marcar o desmarcar en cualquier parte del sitio actualiza la lista sin recargar; desde la lista se quita un favorito con el mismo corazón
+- ✅ **Estado vacío**: Mensaje y botón "Explorar alojamientos" cuando no hay favoritos
+
+### Ver bloque de políticas del producto
+- ✅ **Bloque a todo el ancho**: Título "Políticas del alojamiento" subrayado en verde
+- ✅ **Políticas en columnas**: Dos columnas en escritorio y una en móvil; cada política con ícono, título y descripción (horarios, normas de la casa, no fumar, mascotas, salud y seguridad, cancelación)
+
+### Compartir productos
+- ✅ **Ventana para compartir**: Se abre desde el ícono de compartir del detalle
+- ✅ **Contenido**: Imagen del producto, descripción breve y enlace directo con botón "Copiar"
+- ✅ **Personalización**: Mensaje editable (hasta 280 caracteres) y elección de la red social: Facebook, X (Twitter), Instagram, WhatsApp o LinkedIn
+
+### Puntuar producto
+- ✅ **Estrellas en las tarjetas**: Al lado de la categoría, con la nota sobre 10 y su etiqueta (Excelente, Muy bueno, Bueno, Regular, Malo)
+- ✅ **Estrellas en el detalle**: Debajo del nombre, en el verde de la página; la nota también aparece junto a la categoría
+- ✅ **Cuadro de calificación**: Sobre la esquina de la galería, con la nota, "Ver N comentarios" y "Comentarios de reservas"
+- ✅ **Ventana de comentarios**: Fondo translúcido; arriba la calificación, luego el formulario (1 a 5 estrellas, comentario y botón "Comentar") y después todas las reseñas con estrellas, nombre, fecha y comentario
+- ✅ **Media en tiempo real**: Al comentar, la nota del cuadro, del detalle y de la ventana se actualiza sin recargar
+- ✅ **Sin valoraciones**: El producto se muestra sin estrellas, con nota 0.0 y "Sin valoraciones"
+
+### Mejoras de autenticación
+- ✅ **Páginas solo para invitados**: Con sesión iniciada, `/login` y `/register` redirigen al Home (`GuestRoute`)
+- ✅ **Validación del login**: Solo comprueba que el correo y la contraseña no estén vacíos; la validación de las credenciales queda en el backend
+
+## 🏗️ Nuevos Archivos
+
+```
+src/
+├── api/
+│   ├── favoriteService.js         # Leer, agregar y quitar favoritos
+│   └── reviewService.js           # Leer y publicar reseñas
+├── components/
+│   ├── atoms/
+│   │   ├── FavoriteButton.jsx     # Corazón de favorito
+│   │   ├── FavoritesIcon.jsx      # Ícono "Mis viajes" (maleta con corazón)
+│   │   ├── StarRating.jsx         # Estrellas de solo lectura o para calificar
+│   │   └── Toast.jsx              # Aviso breve en la parte inferior
+│   ├── molecules/
+│   │   ├── CalendarMonth.jsx      # Un mes del calendario
+│   │   ├── SearchAutocomplete.jsx # Campo de destino con sugerencias
+│   │   ├── ProductPolicies.jsx    # "Políticas del alojamiento"
+│   │   └── RatingSummaryCard.jsx  # Cuadro de calificación del detalle
+│   ├── organisms/
+│   │   ├── DateRangeCalendar.jsx  # Calendario doble del buscador
+│   │   ├── AvailabilityCalendar.jsx # Calendario de disponibilidad del detalle
+│   │   ├── SearchResults.jsx      # Resultados de la búsqueda
+│   │   ├── ShareModal.jsx         # Ventana para compartir
+│   │   └── ReviewsModal.jsx       # Ventana de calificación y comentarios
+│   └── pages/
+│       └── FavoritesPage.jsx      # "Mis viajes"
+├── context/
+│   ├── FavoritesContext.js        # Contexto + hook useFavorites()
+│   └── FavoritesProvider.jsx      # Favoritos compartidos por toda la app
+├── data/
+│   ├── productPolicies.js         # Políticas del alojamiento
+│   └── shareNetworks.js           # Redes sociales y sus enlaces para compartir
+├── routes/
+│   └── GuestRoute.jsx             # Solo para usuarios sin sesión
+└── utils/
+    ├── dateUtils.js               # Meses, días y formato de fechas
+    └── ratingUtils.js             # Nota sobre 10, etiquetas y fecha de las reseñas
+```
+
+**Archivos modificados**: `SearchSection`, `SearchInput`, `Button`, `LargeCard`, `ProductGrid`, `Header`, `HomePage`, `ProductDetailPage`, `CategoryProductsPage`, `LoginPage`, `productService`, `AppRouter`, `main.jsx` (envuelve la app con `FavoritesProvider`).
+
+## 🧭 Nuevas Rutas
+
+| Ruta | Acceso | Página |
+|---|---|---|
+| `/?q=&checkIn=&checkOut=` | Pública | `HomePage` con resultados de búsqueda |
+| `/mis-viajes` | Con sesión | `FavoritesPage` |
+| `/login`, `/register` | Solo sin sesión | `LoginPage`, `RegisterPage` (ahora con `GuestRoute`) |
+
+## 🔌 Nuevos Endpoints Consumidos
+
+| Recurso | Endpoints |
+|---|---|
+| Búsqueda | `GET /products/search?q=&checkIn=&checkOut=`, `GET /products/suggestions?q=` |
+| Favoritos | `GET /users/me/favorites`, `PUT /users/me/favorites/{productId}`, `DELETE /users/me/favorites/{productId}` |
+| Reseñas | `GET /products/{productId}/reviews`, `POST /products/{productId}/reviews` |
+
+La búsqueda, las sugerencias y la lectura de reseñas son públicas; los favoritos y publicar reseñas envían `Authorization: Bearer <token>`.
+
+## 📊 Cambios en la Estructura de Datos
+
+El producto ahora incluye su calificación:
+
+```javascript
+averageRating: number | null,   // media de 1 a 5 estrellas (null si no tiene reseñas); se muestra sobre 10
+reviewCount: number             // total de reseñas
+```
+
+Modelo de reseña:
+
+```javascript
+{ id: number, rating: number /* 1-5 */, comment: string | null, createdAt: string, userName: string /* "Mario B." */ }
+```
+
+Favoritos del usuario: lista de ids de productos, ej. `[1, 4, 7]`.
+
+## 🎨 Decisiones de Diseño del Sprint
+
+### 1. **Favoritos con Context API**
+- `FavoritesProvider` guarda los favoritos una sola vez para toda la app, igual que la sesión. Así el corazón de las tarjetas, el del detalle y la lista "Mis viajes" están siempre sincronizados.
+### 2. **Actualización optimista**
+- Al marcar un favorito el corazón cambia antes de que responda el servidor; si la petición falla, vuelve atrás y se muestra un aviso.
+### 3. **Búsqueda en la URL**
+- Igual que los filtros de categorías, la búsqueda vive en los parámetros de la URL (`useSearchParams`) en lugar de un estado local.
+### 4. **Calendario propio**
+- El calendario se construye con React, Tailwind e `Intl.DateTimeFormat`, sin librerías externas, para que coincida con el diseño de la página.
+### 5. **Nota sobre 10**
+- Se califica con 1 a 5 estrellas, pero la nota se muestra sobre 10, como en Booking o Despegar.
+
+
 ## Autor
  
 Este proyecto fue creado por:

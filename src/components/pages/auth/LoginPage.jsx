@@ -25,17 +25,14 @@ export const LoginPage = () => {
 
         const newErrors = {}
 
+        // Only required fields here: the format and length rules belong to the register form,
+        // the backend is the one that checks the credentials.
         if (!email.trim()){
             newErrors.email = 'Correo obligatorio';
-
-        }else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-            newErrors.email = 'Ingresa un correo válido (ej: nombre@correo.com)'
         }
 
         if (!password.trim()){
             newErrors.password = 'Contraseña obligatoria'
-        } else if (password.length < 8){
-            newErrors.password = 'La contraseña debe tener al menos 8 caracteres'
         }
 
         setErrors(newErrors)
