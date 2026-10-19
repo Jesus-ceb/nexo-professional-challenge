@@ -1,7 +1,14 @@
 import { FavoriteButton } from "../atoms/FavoriteButton"
+import { StarRating } from "../atoms/StarRating"
+import { displayRating, formatRating, ratingLabel } from "../../utils/ratingUtils"
 
 // The heart only shows when the parent passes onToggleFavorite.
-export const LargeCard = ({category, name, imageURL, location, features = [], isFavorite = false, onToggleFavorite}) => {
+// Without reviews the product shows no stars, 0.0 and "Sin valoraciones".
+export const LargeCard = ({category, name, imageURL, location, features = [], isFavorite = false, onToggleFavorite,
+                           averageRating = null}) => {
+
+    const rating = displayRating(averageRating)
+
     return (
         <>
         <div className="w-full h-full flex flex-col lg:flex-row bg-white rounded-md overflow-hidden">
@@ -33,8 +40,10 @@ export const LargeCard = ({category, name, imageURL, location, features = [], is
                 {/* primer bloque: categoría + nombre (izquierda) y calificación (derecha) */}
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                        <span className="block text-xs uppercase text-[#A0CF8C]">
+                        {/* category + stars on the same line */}
+                        <span className="flex items-center gap-1.5 text-xs uppercase text-[#A0CF8C]">
                             {category}
+                            <StarRating value={rating} className="text-sm"/>
                         </span>
                         <h3 className="text-xl font-bold text-[#5D9C42] truncate">
                             {name}
@@ -42,11 +51,11 @@ export const LargeCard = ({category, name, imageURL, location, features = [], is
                     </div>
 
                     <div className="flex flex-col items-end shrink-0">
-                        <span className="bg-[#5D9C42] w-10 h-10 rounded-xl text-white flex items-center justify-center">
-                            8
+                        <span className="bg-[#5D9C42] w-10 h-10 rounded-xl text-white font-semibold flex items-center justify-center">
+                            {formatRating(rating)}
                         </span>
                         <span className="text-[#5D9C42] text-sm font-bold whitespace-nowrap">
-                            Muy bueno
+                            {ratingLabel(rating)}
                         </span>
                     </div>
                 </div>

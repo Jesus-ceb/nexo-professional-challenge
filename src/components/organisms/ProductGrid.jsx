@@ -48,6 +48,7 @@ export const ProductGrid = ({ products }) => {
                     category={product.category?.category}
                     location={product.city?.city}
                     features={product.features}
+                    averageRating={product.averageRating}
                     isFavorite={isFavorite(product.id)}
                     onToggleFavorite={() => toggleFavorite(product.id)}
                     />

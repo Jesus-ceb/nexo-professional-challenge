@@ -6,6 +6,11 @@ import { getProductById } from '../../api/productService'
 import { RiArrowLeftCircleLine, RiMapPinLine, RiShareLine } from 'react-icons/ri'
 import { GalleryModal } from '../organisms/GalleryModal'
 import { ShareModal } from '../organisms/ShareModal'
+import { ReviewsModal } from '../organisms/ReviewsModal'
+import { RatingSummaryCard } from '../molecules/RatingSummaryCard'
+import { getReviews } from '../../api/reviewService'
+import { displayRating, formatRating } from '../../utils/ratingUtils'
+import { StarRating } from '../atoms/StarRating'
 import { ProductFeatures } from '../molecules/ProductFeatures'
 import { ProductPolicies } from '../molecules/ProductPolicies'
 import { AvailabilityCalendar } from '../organisms/AvailabilityCalendar'
@@ -50,6 +55,33 @@ export const ProductDetailPage = () => {
     
     
     }, [id]);
+
+    // reviews: loaded with the product; "Reintentar" bumps reviewsReload.
+    // They are stored with the request they belong to, so loading = "the stored one is not the current one".
+    const [showReviews, setShowReviews] = useState(false)
+    const [reviewsReload, setReviewsReload] = useState(0)
+    const reviewsKey = `${id}-${reviewsReload}`
+    const [reviewsData, setReviewsData] = useState({ key: null, reviews: [], error: null })
+    const reviewsLoading = reviewsData.key !== reviewsKey
+
+    useEffect(() => {
+        let ignore = false
+        getReviews(id)
+        .then((reviews) => {
+            if (!ignore) setReviewsData({ key: reviewsKey, reviews, error: null })
+        })
+        .catch((err) => {
+            console.error(err)
+            if (!ignore) setReviewsData({ key: reviewsKey, reviews: [], error: "No pudimos cargar los comentarios en este momento." })
+        })
+        return () => { ignore = true }
+    }, [id, reviewsKey]);
+
+    // A new review goes on top of the list and the product's average/total change at once.
+    const handleReviewCreated = ({ review, averageRating, reviewCount }) => {
+        setReviewsData((data) => ({ ...data, reviews: [review, ...data.reviews] }))
+        setProduct((current) => ({ ...current, averageRating, reviewCount }))
+    }
 
     // Loading and error keep the page layout (header, back button, footer) instead of a bare text.
     if (error || !product) {
@@ -120,9 +152,9 @@ export const ProductDetailPage = () => {
 
                     <div className="flex items-center gap-2">
                         <span className="text-slate-700 font-semibold">{product.category?.category}</span>
-                        {/* Badge circular, usando la cantidad de imágenes como dato real */}
-                        <span className="bg-slate-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
-                            {product.images?.length ?? 0}
+                        {/* Badge: the product rating out of 10 (0.0 when it has no reviews) */}
+                        <span title="Calificación" className="bg-slate-700 text-white rounded-full min-w-8 h-8 px-2 flex items-center justify-center text-sm font-semibold">
+                            {formatRating(displayRating(product.averageRating))}
                         </span>
                     </div>
                 </div>
@@ -205,6 +237,15 @@ export const ProductDetailPage = () => {
                             </div>
                         </div>
                     )}
+
+                    {/* rating box: over the bottom-right corner of the photos (full width under them on mobile) */}
+                    <div className="relative z-10 flex justify-end mt-4 md:-mt-8 md:mr-4">
+                        <RatingSummaryCard
+                        rating={displayRating(product.averageRating)}
+                        reviewCount={product.reviewCount ?? 0}
+                        onClick={() => setShowReviews(true)}
+                        />
+                    </div>
                 </div>
 
                 {/* Contenido principal */}
@@ -213,6 +254,13 @@ export const ProductDetailPage = () => {
                     <h1 className="text-3xl font-bold text-slate-800">
                         {product.name}
                     </h1>
+
+                    {/* rating stars under the name, in the site's green */}
+                    <StarRating
+                    value={displayRating(product.averageRating)}
+                    color="text-[#5D9C42]"
+                    className="mt-1 text-2xl"
+                    />
 
                     {/* Descripción */}
                     <h2 className="text-xl font-bold text-slate-800 mt-6 border-b pb-2 ">
@@ -242,6 +290,21 @@ export const ProductDetailPage = () => {
                 images={product.images}
                 productName={product.name}
                 onClose={() => setShowGallery(false)}
+                />
+            )}
+
+            {/* reviews window: rating, form ("Comentar") and comments */}
+            {showReviews && (
+                <ReviewsModal
+                productId={product.id}
+                rating={displayRating(product.averageRating)}
+                reviewCount={product.reviewCount ?? 0}
+                reviews={reviewsData.reviews}
+                loading={reviewsLoading}
+                error={reviewsData.error}
+                onRetry={() => setReviewsReload((key) => key + 1)}
+                onCreated={handleReviewCreated}
+                onClose={() => setShowReviews(false)}
                 />
             )}
 
